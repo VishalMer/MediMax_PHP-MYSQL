@@ -2,6 +2,7 @@
 
 include 'connection.php';
 include 'user_details.php';
+include 'products_buttons.php';
 
 ?>
 
@@ -21,7 +22,7 @@ include 'user_details.php';
     </div>
     <header class="header">
         <a href="Index.php" class="logo">
-            <img src="./Images/MediFreshlogo.png" alt="MediMax">
+            <img src="../Images/MediMax_Logo.jpg" alt="MediMax">
         </a>
 
         <div class="search-bar">
@@ -102,12 +103,14 @@ include 'user_details.php';
        <div class="shopping">
             <?php
             // Search products based on the search query
-            if (!empty($search_query)) {
-                $search_sql = mysqli_real_escape_string($conn, $search_query);
-                $select_product = mysqli_query($conn, "SELECT * FROM `products` WHERE name LIKE '%$search_sql%'") or die('Query failed');
-            } else {
-                $select_product = mysqli_query($conn, "SELECT * FROM `products` LIMIT 8") or die('Query failed');
-            }
+            // if (!empty($search_query)) {
+            //     $search_sql = mysqli_real_escape_string($conn, $search_query);
+            //     $select_product = mysqli_query($conn, "SELECT * FROM `products` WHERE name LIKE '%$search_sql%'") or die('Query failed');
+            // } else {
+            //     $select_product = mysqli_query($conn, "SELECT * FROM `products` LIMIT 8") or die('Query failed');
+            // }
+
+            $select_product = mysqli_query($conn, "SELECT * FROM `products` LIMIT 8") or die('Query failed');
 
             if (mysqli_num_rows($select_product) > 0) {
                 while ($fetch_product = mysqli_fetch_assoc($select_product)) {
@@ -117,7 +120,7 @@ include 'user_details.php';
             ?>
                     <form method="post" class="box" action="">
                         <h2><?php echo $fetch_product['name']; ?></h2>
-                        <div class="box-img" style="background-image: url('./Images/<?php echo $fetch_product['image']; ?>')"></div>
+                        <div class="box-img" style="background-image: url('../Images/<?php echo $fetch_product['image']; ?>')"></div>
                         <div class="box-bottom">
                             <p>Price: <i class="fa-solid fa-indian-rupee-sign"></i> <strong><?php echo $fetch_product['price']; ?></strong></p>
                             <input type="submit" value="Add to cart" name="add_to_cart" id="addToCart">
