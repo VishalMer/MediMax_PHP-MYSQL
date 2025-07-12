@@ -1,6 +1,7 @@
 <?php
 
 include 'connection.php';
+include 'user_details.php';
 
 ?>
 
@@ -16,7 +17,7 @@ include 'connection.php';
 </head>
 <body>
     <div class="bcimage">
-        <img src="./Images/MediMax-BG.jpeg">
+        <img src="../Images/MediMax-BG.jpeg">
     </div>
     <header class="header">
         <a href="Index.php" class="logo">
@@ -39,20 +40,20 @@ include 'connection.php';
         </nav>
 
         <!-- Profile picture or first letter -->
-        <!-- <div class="profile">
+        <div class="profile">
             <button><a href="Wishlist.php"><i class="fa-solid fa-heart" style="color: #ff0000;"></i></a></button>
             <button><a href="Cart.php"><i class="fa-solid fa-cart-plus"></i></a></button>
             <button id="options">
                 <div class="pr-pic">
                     <?php if (!empty($user_image)): ?>
-                        <img src="./Images/<?php echo htmlspecialchars($user_image); ?>" alt="Profile Picture" style="width: 10px; height: 10px; margin-bottom: 1.5px; border-radius: 50%;">
+                        <img src="../Images/<?php echo htmlspecialchars($user_image); ?>" alt="Profile Picture" style="width: 10px; height: 10px; margin-bottom: 1.5px; border-radius: 50%;">
                     <?php else: ?>
                         <span><?php echo $firstLetter; ?></span>
                     <?php endif; ?>
                 </div>
                 <div id="userName"><?php echo htmlspecialchars($fetch_user['name']); ?></div>
             </button>
-        </div> -->
+        </div>
     </header>
     
     <!-- Profile Options -->
@@ -60,14 +61,14 @@ include 'connection.php';
         <button><a href="Update Profile.php">Update User Profile <i class="fa-solid fa-address-card" style="color: #ffffff;"></i></a></button><br>
         <button><a href="Update Password.php">Change Password <i class="fa-solid fa-key" style="color: #ffffff;"></i></a></button><br>
 
-        <!-- <?php if ($user_role === 'admin' || $user_role === 'owner') { ?>
+        <?php if ($user_role === 'admin' || $user_role === 'owner') { ?>
             <button><a href="AdminPanel.php" target="_blank">Admin Panel <i class="fa-solid fa-user-tie"></i></a></button><br>
-        <?php } ?> -->
+        <?php } ?>
 
-        <!-- <button>
+        <button>
             <a href="index.php?logout=<?php echo $user_id; ?>" 
                onclick="return confirm('Are you sure you want to log out ??');">Log Out <i class="fa-solid fa-right-from-bracket" style="color: #ffffff;"></i></a>
-        </button> -->
+        </button>
     </div>
 
     <section class="main">
@@ -98,21 +99,21 @@ include 'connection.php';
             </marquee>
         </div>
 
-        <div class="shopping">
+       <div class="shopping">
             <?php
             // Search products based on the search query
-            // if (!empty($search_query)) {
-            //     $search_sql = mysqli_real_escape_string($conn, $search_query);
-            //     $select_product = mysqli_query($conn, "SELECT * FROM `products` WHERE name LIKE '%$search_sql%'") or die('Query failed');
-            // } else {
-            //     $select_product = mysqli_query($conn, "SELECT * FROM `products` LIMIT 8") or die('Query failed');
-            // }
+            if (!empty($search_query)) {
+                $search_sql = mysqli_real_escape_string($conn, $search_query);
+                $select_product = mysqli_query($conn, "SELECT * FROM `products` WHERE name LIKE '%$search_sql%'") or die('Query failed');
+            } else {
+                $select_product = mysqli_query($conn, "SELECT * FROM `products` LIMIT 8") or die('Query failed');
+            }
 
             if (mysqli_num_rows($select_product) > 0) {
                 while ($fetch_product = mysqli_fetch_assoc($select_product)) {
                     // Check if the product is in the wishlist
-                    // $wishlist_check = mysqli_query($conn, "SELECT * FROM `wishlist` WHERE name = '{$fetch_product['name']}' AND user_id = '$user_id'") or die('Query failed');
-                    // $is_in_wishlist = mysqli_num_rows($wishlist_check) > 0;
+                    $wishlist_check = mysqli_query($conn, "SELECT * FROM `wishlist` WHERE name = '{$fetch_product['name']}' AND user_id = '$user_id'") or die('Query failed');
+                    $is_in_wishlist = mysqli_num_rows($wishlist_check) > 0;
             ?>
                     <form method="post" class="box" action="">
                         <h2><?php echo $fetch_product['name']; ?></h2>
