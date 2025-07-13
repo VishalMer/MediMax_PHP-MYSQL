@@ -3,7 +3,7 @@
     $user_id = $_SESSION['user_id'];
     
     if (!isset($user_id)) {
-        header('Location: LoginForm.php');
+        header('Location: login_form.php');
     }
     
     // Fetch the details of the user by user id
