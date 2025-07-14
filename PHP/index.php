@@ -25,9 +25,10 @@ include 'products_buttons.php';
             <img src="../Images/MediMax_Logo.png" alt="MediMax">
         </a>
 
+        <!-- Search Bar -->
         <div class="search-bar">
             <form method="post" action="">
-                <input type="search" name="search_input" placeholder="Search MediFresh.in" id="search-input" value="<?php echo htmlspecialchars($search_query); ?>">
+                <input type="search" name="search_input" placeholder="Search MediMax.com" id="search-input" value="<?php echo htmlspecialchars($search_query); ?>">
                 <button type="submit" name="search" class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></button>
             </form>
         </div>
@@ -101,18 +102,43 @@ include 'products_buttons.php';
         </div>
 
        <div class="shopping"> 
-        <form method="post" action="" class="box">       
-            <h2>Product1</h2>
-            <div class="box-img" style="background-image: url('../Images/Bandage Roll.jpg')"></div>
-            <div class="box-bottom">
-                <p>Price: <i class="fa-solid fa-indian-rupee-sign"></i> <strong>499</strong></p>
-                <input type="submit" value="Add to cart" name="add_to_cart" id="addToCart">
-                <button type="submit" name="add_to_wishlist" id="add-wishlist" class="wishlist-btn">
-                    <i class="<?php echo $is_in_wishlist ? 'fa-solid fa-heart' : 'fa-regular fa-heart'; ?>" 
-                       style="<?php echo $is_in_wishlist ? 'color: #ff0000;' : ''; ?>"></i>
-                </button>
-            </div><br>
-        </form>
+        <?php
+            // Search products based on the search query
+            if (!empty($search_query)) {
+                $search_sql = mysqli_real_escape_string($conn, $search_query);
+                $select_product = mysqli_query($conn, "SELECT * FROM `products` WHERE name LIKE '%$search_sql%'") or die('Query failed');
+            } else {
+                $select_product = mysqli_query($conn, "SELECT * FROM `products` LIMIT 5") or die('Query failed');
+            }
+
+            if (mysqli_num_rows($select_product) > 0) {
+                while ($fetch_product = mysqli_fetch_assoc($select_product)) {
+                    // Check if the product is in the wishlist
+                    $wishlist_check = mysqli_query($conn, "SELECT * FROM `wishlist` WHERE name = '{$fetch_product['name']}' AND user_id = '$user_id'") or die('Query failed');
+                    $is_in_wishlist = mysqli_num_rows($wishlist_check) > 0;
+            ?>
+                    <form method="post" class="box" action="">
+                        <h2><?php echo $fetch_product['name']; ?></h2>
+                        <div class="box-img" style="background-image: url('../Images/<?php echo $fetch_product['image']; ?>')"></div>
+                        <div class="box-bottom">
+                            <p>Price: <i class="fa-solid fa-indian-rupee-sign"></i> <strong><?php echo $fetch_product['price']; ?></strong></p>
+                            <input type="submit" value="Add" name="add_to_cart" id="addToCart">
+                            <button type="submit" name="add_to_wishlist" id="add-wishlist" class="wishlist-btn">
+                                <i class="<?php echo $is_in_wishlist ? 'fa-solid fa-heart' : 'fa-regular fa-heart'; ?>" 
+                                   style="<?php echo $is_in_wishlist ? 'color: #ff0000;' : ''; ?>"></i>
+                            </button>
+                        </div><br>
+
+                        <input type="hidden" name="product_image" value="<?php echo $fetch_product['image']; ?>">
+                        <input type="hidden" name="product_name" value="<?php echo $fetch_product['name']; ?>">
+                        <input type="hidden" name="product_price" value="<?php echo $fetch_product['price']; ?>">
+                    </form>
+            <?php
+                }
+            } else {
+                echo "<p class='no-products'>No products found, We will make it available as soon as possible..</p>";
+            }
+            ?>
         </div>
     </section>
 
@@ -128,14 +154,14 @@ include 'products_buttons.php';
         </div>
 
         <div class="footer-p">
-            <p>MediMax.in</p>
+            <p>MediMax.com</p>
             <p id="tc">Privacy Policy | Terms & Conditions</p> 
             <p><i class="fa-regular fa-copyright"></i>2024 MediMax. All rights reserved.</p>           
         </div>
 
         <div class="footer-p">
             <p>Contact Us: +91 1234567890</p>
-            <p>Email: support@medimax.in</p>
+            <p>Email: support@medimax.com</p>
         </div>
     </footer>
     

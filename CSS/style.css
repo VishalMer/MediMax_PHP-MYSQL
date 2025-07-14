@@ -284,7 +284,7 @@ body::-webkit-scrollbar{
 .best-sellings{
     text-align: center;
     justify-content: center;
-    margin: 0em 0 2em 0em;
+    margin: 3em 0 2em 0em;
     color:rgb(9, 78, 126);
     padding: 5px 0;
     font-weight: bold;
@@ -312,37 +312,28 @@ body::-webkit-scrollbar{
     justify-content: space-evenly;
     flex-wrap: wrap;
     margin-top: 5vh;
-    margin-bottom: 3em;
+    margin-bottom: 0em;
 }
 
 .box{
     background-color: #eee5e9;
-    height: 57vh;
-    width: 22%;
-    margin-top: 5em;
+    height: 45vh;
+    width: 17.5%;
+    margin-top: 3em;
     border-radius: 10px;
     overflow: hidden;
     position: relative;
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transition for hover effects */
-    opacity: 0; /* Start as invisible */
-    transform: scale(0.9); /* Start smaller */
-    transition: opacity 0.5s ease-out, transform 0.5s ease-out; /* Transition for opacity and scale */
-}
-
-.box.visible {
-    opacity: 1; 
-    transform: scale(1); 
 }
 
 .box .box-img{
     background-size: cover;
     background-position: center;
-    height: 40vh;
-    margin: 1rem 1.5rem;
+    height: 67%;
+    margin: 1rem .5rem;
 }
 
 .box h2{
-    font-size: 2em;
+    font-size: 1.5em;
     color: #0f1111;
     font-family: MS Reference Sans Serif,Lucida Sans,Kristen ITC;
     font-weight: 900;    
