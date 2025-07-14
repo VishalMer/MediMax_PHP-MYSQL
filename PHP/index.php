@@ -122,7 +122,7 @@ include 'products_buttons.php';
                         <div class="box-img" style="background-image: url('../Images/<?php echo $fetch_product['image']; ?>')"></div>
                         <div class="box-bottom">
                             <p>Price: <i class="fa-solid fa-indian-rupee-sign"></i> <strong><?php echo $fetch_product['price']; ?></strong></p>
-                            <input type="submit" value="Add" name="add_to_cart" id="addToCart">
+                            <button type="submit" name="add_to_cart" id="addToCart"><i class="fa-solid fa-cart-plus"></i></button>
                             <button type="submit" name="add_to_wishlist" id="add-wishlist" class="wishlist-btn">
                                 <i class="<?php echo $is_in_wishlist ? 'fa-solid fa-heart' : 'fa-regular fa-heart'; ?>" 
                                    style="<?php echo $is_in_wishlist ? 'color: #ff0000;' : ''; ?>"></i>
