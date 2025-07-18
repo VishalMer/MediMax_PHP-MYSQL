@@ -22,7 +22,7 @@ include 'PHP/products_buttons.php';
     </div>
     <header class="header">
         <a href="Index.php" class="logo">
-            <img src="Images/MediMax_Logo.png" alt="MediMax">
+            <img src="Images/MediMax_Logo1.png" alt="MediMax">
         </a>
 
         <!-- Search Bar -->
@@ -68,7 +68,7 @@ include 'PHP/products_buttons.php';
         <?php } ?>
 
         <button>
-            <a href="index.php?logout=<?php echo $user_id; ?>" 
+            <a href="PHP/login_form.php?logout=<?php echo $user_id; ?>" 
                onclick="return confirm('Are you sure you want to log out ??');">Log Out <i class="fa-solid fa-right-from-bracket" style="color: #ffffff;"></i></a>
         </button>
     </div>

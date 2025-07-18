@@ -19,12 +19,12 @@ include 'products_buttons.php';
 
     <header class="header">
         <a href="Index.php" class="logo">
-            <img src="../Images/MediMax_Logo.jpg" alt="MediMax">
+            <img src="../Images/MediMax_Logo.png" alt="MediMax">
         </a>
 
         <div class="search-bar">
             <form method="post" action="">
-                <input type="search" placeholder="Search MediFresh.in" name="search_input" id="search-input" value="<?php echo ($search_query); ?>">
+                <input type="search" placeholder="Search MediMax.com" name="search_input" id="search-input" value="<?php echo ($search_query); ?>">
                 <button type="submit" name="search" class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></button>
             </form>
         </div>
@@ -62,7 +62,7 @@ include 'products_buttons.php';
         <?php } ?>
 
         <button>
-            <a href="index.php?logout=<php echo $user_id; ?>" 
+            <a href="login_form.php?logout=<php echo $user_id; ?>" 
             onclick="return confirm('Are you sure you want to log out ??');">Log Out <i class="fa-solid fa-right-from-bracket" style="color: #ffffff;"></i></a>
         </button>
     </div>
@@ -130,9 +130,9 @@ if (isset($message)) {
         </div>
         
         <div class="footer-p">
-            <p>MediFresh.in</p>
+            <p>MediMax.com</p>
             <p id="tc">Privacy Policy | Terms & Conditions</p> 
-            <p><i class="fa-regular fa-copyright"></i>2024 MediFresh. All rights reserved.</p>           
+            <p><i class="fa-regular fa-copyright"></i>2024 MediMax. All rights reserved.</p>           
         </div>
 
         <div class="footer-p">

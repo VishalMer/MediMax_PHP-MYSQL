@@ -45,15 +45,17 @@ body::-webkit-scrollbar{
     align-items: center;
     justify-content: space-between;
     backdrop-filter: blur(4.5px);
+    background-color: rgba(255, 255, 255, 0.8); 
     z-index: 1;
     animation: slideDown 0.5s ease-in-out; /* Animation for header */
 }
 
 .header .logo img{
     margin: 1em;
-    height: 5.9rem;
+    height: 6.2rem;
     width: 10rem;
     border-radius: 5px;
+    scale: 150%;
 }
 
 .header .nav a{
