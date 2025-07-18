@@ -30,7 +30,7 @@ include 'products_buttons.php';
         </div>
         
         <nav class="nav">
-           <a href="index.php">Home</a>
+           <a href="../index.php">Home</a>
            <a href="products.php" class="active">Products</a>
            <a href="Orders.php">Orders</a>
            <a href="AboutUs.php">About Us</a>

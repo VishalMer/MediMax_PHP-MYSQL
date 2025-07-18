@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if($role == 'admin' || $role == 'owner') {
             header("Location: AdminPanel.php");
         } else {
-            header("Location: index.php");
+            header("Location: ../index.php");
         }
         exit(); // Ensure that the script stops after the redirect
     } else {
