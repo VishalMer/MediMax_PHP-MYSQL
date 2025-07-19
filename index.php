@@ -1,5 +1,5 @@
 <?php
-session_start(); // Start the session at the very beginning of index.php
+// index.php
 
 // --- START: Crucial Cache Control Headers for Index.php ---
 // These headers tell the browser NOT to cache this page.
@@ -12,65 +12,27 @@ header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // A date in the past (effecti
 // Include your database connection FIRST, so $conn is available for all subsequent includes/queries.
 include 'PHP/connection.php'; // This should define $conn
 
-// Include user_details.php for logout logic (it no longer redirects if not logged in).
-include 'PHP/user_details.php';
+// Include the centralized user session and details logic.
+// This file will now handle session_start(), fetching user details ($user_id, $username, etc.),
+// and processing the `logout` GET parameter. It also initializes and manages the $message array.
+include 'PHP/user_session.php';
 
 // Include products_buttons.php for handling add to cart/wishlist actions.
-// This file will need to be smart about user_id being present.
-include 'PHP/products_buttons.php'; // This likely handles POST requests for products
+// This file will use the $user_id and $message array prepared by user_session.php.
+include 'PHP/products_buttons.php';
 
-// Initialize variables for user display (will be populated if logged in)
-$user_id = null;
-$fetch_user = null;
-$username = 'Guest';
-$firstLetter = 'G';
-$user_role = 'guest';
-$user_image = '';
-$search_query = ''; // Initialize search query to prevent undefined variable notice
-
-
-// Handle search input BEFORE fetching products
+// Initialize search query to prevent undefined variable notice
+// This remains specific to index.php's display and immediate handling.
+$search_query = '';
 if (isset($_POST['search'])) {
     $search_query = htmlspecialchars($_POST['search_input']);
+    // If you want search to actually redirect to products.php, add that here:
+    // header('Location: PHP/Products.php?search=' . urlencode($search_query));
+    // exit();
 }
 
-
-// --- User Details Fetching Logic for Index.php ---
-// This block runs ONLY if the user is logged in.
-if (isset($_SESSION['user_id'])) {
-    $user_id = $_SESSION['user_id'];
-
-    // Check if $conn is available from PHP/connection.php
-    if (isset($conn)) {
-        $select_user = mysqli_query($conn, "SELECT * FROM `users` WHERE id = '$user_id'") or die('Query failed: ' . mysqli_error($conn));
-        if (mysqli_num_rows($select_user) > 0) {
-            $fetch_user = mysqli_fetch_assoc($select_user);
-            $username = $fetch_user['name'];
-            $firstLetter = strtoupper($username[0]);
-            $user_role = $fetch_user['role'];
-            $user_image = $fetch_user['image'];
-        } else {
-            // User ID in session but not in DB, force logout
-            session_unset();
-            session_destroy();
-            header('Location: PHP/login_form.php?logout=true');
-            exit();
-        }
-    } else {
-        // Handle case where database connection ($conn) is not available
-        // Log an error or display a message, but don't stop the page for guests
-        error_log("Database connection (\$conn) not available in index.php.");
-        // You might want to unset session here if DB connection is crucial for even guest display
-    }
-}
-
-// Any $message variable from products_buttons.php or elsewhere
-$message = []; // Initialize to an empty array to prevent notices
-if (isset($_SESSION['message'])) {
-    $message = $_SESSION['message'];
-    unset($_SESSION['message']); // Clear message after displaying
-}
-
+// Note: $user_id, $username, $firstLetter, $user_role, $user_image, and $message
+// are all now populated by PHP/user_session.php. You no longer need to manually initialize or fetch them here.
 ?>
 
 <!DOCTYPE html>
@@ -87,19 +49,18 @@ if (isset($_SESSION['message'])) {
         <img src="Images/MediMax-BG.jpeg" alt="MediMax Background Image" >
     </div>
     <header class="header">
-        <a href="Index.php" class="logo">
+        <a href="index.php" class="logo">
             <img src="Images/MediMax_Logo1.png" alt="MediMax">
         </a>
 
         <div class="search-bar">
-            <form method="post" action="">
-                <input type="search" name="search_input" placeholder="Search MediMax.com" id="search-input" value="<?php echo htmlspecialchars($search_query); ?>">
+            <form method="post" action="index.php"> <input type="search" name="search_input" placeholder="Search MediMax.com" id="search-input" value="<?php echo htmlspecialchars($search_query); ?>">
                 <button type="submit" name="search" class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></button>
             </form>
         </div>
         
         <nav class="nav">
-           <a href="Index.php" class="active">Home</a>
+           <a href="index.php" class="active">Home</a>
            <a href="PHP/Products.php">Products</a>
            <a href="PHP/Orders.php">Orders</a>
            <a href="PHP/AboutUs.php">About Us</a>
@@ -107,9 +68,8 @@ if (isset($_SESSION['message'])) {
         </nav>
 
         <div class="profile">
-        <?php if (isset($_SESSION['user_id'])): ?>
-            <button><a href="Wishlist.php"><i class="fa-solid fa-heart" style="color: #ff0000;"></i></a></button>
-            <button><a href="Cart.php"><i class="fa-solid fa-cart-plus"></i></a></button>
+        <?php if ($user_id !== null): ?> <button><a href="PHP/Wishlist.php"><i class="fa-solid fa-heart" style="color: #ff0000;"></i></a></button>
+            <button><a href="PHP/cart.php"><i class="fa-solid fa-cart-plus"></i></a></button>
             <button id="options">
                 <div class="pr-pic">
                     <?php if (!empty($user_image)): ?>
@@ -124,29 +84,27 @@ if (isset($_SESSION['message'])) {
                 <a href="PHP/login_form.php">Login/Register</a>
             </button>
         <?php endif; ?>
-    </div>
+        </div>
     </header>
     
-    <?php if (isset($_SESSION['user_id'])): ?>
-        <div class="pr-options hide">
-            <button><a href="Update Profile.php">Update User Profile <i class="fa-solid fa-address-card" style="color: #ffffff;"></i></a></button><br>
-            <button><a href="Update Password.php">Change Password <i class="fa-solid fa-key" style="color: #ffffff;"></i></a></button><br>
+    <?php if ($user_id !== null): ?> <div class="pr-options hide">
+            <button><a href="PHP/Update Profile.php">Update User Profile <i class="fa-solid fa-address-card" style="color: #ffffff;"></i></a></button><br>
+            <button><a href="PHP/Update Password.php">Change Password <i class="fa-solid fa-key" style="color: #ffffff;"></i></a></button><br>
 
             <?php if ($user_role === 'admin' || $user_role === 'owner') { ?>
-                <button><a href="AdminPanel.php" target="_blank">Admin Panel <i class="fa-solid fa-user-tie"></i></a></button><br>
+                <button><a href="PHP/AdminPanel.php" target="_blank">Admin Panel <i class="fa-solid fa-user-tie"></i></a></button><br>
             <?php } ?>
 
             <button>
-                <a href="?logout=<?php echo htmlspecialchars($user_id); ?>"
-                   onclick="return confirm('Are you sure you want to log out?');">Log Out <i class="fa-solid fa-right-from-bracket" style="color: #ffffff;"></i></a>
+                <a href="?logout=true"  onclick="return confirm('Are you sure you want to log out?');">Log Out <i class="fa-solid fa-right-from-bracket" style="color: #ffffff;"></i></a>
             </button>
         </div>
     <?php endif; ?>
 
     <section class="main">
         <?php
-        // Display messages from $_SESSION['message']
-        if (!empty($message)) { // Use !empty($message) now that it's an array
+        // Display messages from $_SESSION['message'] (now managed by user_session.php)
+        if (!empty($message)) {
             foreach ($message as $msg) {
                 echo '<div class="message" onclick="this.remove();">'.$msg.'</div>';
             }
@@ -159,8 +117,7 @@ if (isset($_SESSION['message'])) {
                 user-friendly interface and streamlined features, offers<br>
                 a highly convenient, accessible, and efficient platform for purchasing<br>
                 a wide range of essential medicines, healthcare products, and wellness items."</p><br><br>
-            <button><a href="AboutUs.php"> Discover More...</a></button>
-        </div><br>
+            <button><a href="PHP/AboutUs.php"> Discover More...</a></button> </div><br>
 
         <div class="best-sellings">
             <marquee behavior="alternate" loop>
@@ -187,18 +144,17 @@ if (isset($_SESSION['message'])) {
                     // Initialize $is_in_wishlist
                     $is_in_wishlist = false;
                     // Only check wishlist if user is logged in
-                    if (isset($_SESSION['user_id']) && isset($user_id)) {
-                        $wishlist_check = mysqli_query($conn, "SELECT * FROM `wishlist` WHERE name = '{$fetch_product['name']}' AND user_id = '$user_id'") or die('Query failed: ' . mysqli_error($conn));
+                    // $user_id is now provided by user_session.php
+                    if ($user_id !== null) {
+                        $wishlist_check = mysqli_query($conn, "SELECT * FROM `wishlist` WHERE name = '" . mysqli_real_escape_string($conn, $fetch_product['name']) . "' AND user_id = '$user_id'") or die('Query failed: ' . mysqli_error($conn));
                         $is_in_wishlist = mysqli_num_rows($wishlist_check) > 0;
                     }
             ?>
-                    <form method="post" class="box" action="">
-                        <h2><?php echo htmlspecialchars($fetch_product['name']); ?></h2>
+                    <form method="post" class="box" action="index.php"> <h2><?php echo htmlspecialchars($fetch_product['name']); ?></h2>
                         <div class="box-img" style="background-image: url('Images/<?php echo htmlspecialchars($fetch_product['image']); ?>')"></div>
                         <div class="box-bottom">
                             <p>Price: <i class="fa-solid fa-indian-rupee-sign"></i> <strong><?php echo htmlspecialchars($fetch_product['price']); ?></strong></p>
-                            <?php if (isset($_SESSION['user_id'])): ?>
-                                <button type="submit" name="add_to_cart" id="addToCart"><i class="fa-solid fa-cart-plus"></i></button>
+                            <?php if ($user_id !== null): ?> <button type="submit" name="add_to_cart" id="addToCart"><i class="fa-solid fa-cart-plus"></i></button>
                                 <button type="submit" name="add_to_wishlist" id="add-wishlist" class="wishlist-btn">
                                     <i class="<?php echo $is_in_wishlist ? 'fa-solid fa-heart' : 'fa-regular fa-heart'; ?>" 
                                        style="<?php echo $is_in_wishlist ? 'color: #ff0000;' : ''; ?>"></i>
