@@ -1,21 +1,26 @@
 <?php
-    session_start();
-    $user_id = $_SESSION['user_id'];
-    
-    if (!isset($user_id)) {
-        header('Location: PHP/login_form.php');
-    }
-    
-    // Fetch the details of the user by user id
-    $select_user = mysqli_query($conn, "SELECT * FROM `users` WHERE id = '$user_id'") or die('Query failed');
-    if (mysqli_num_rows($select_user) > 0) {
-        $fetch_user = mysqli_fetch_assoc($select_user);
-    }
-    
-    //fetch user's info
-    $username = $fetch_user['name'];
-    $firstLetter = strtoupper($username[0]);
-    $user_role = $fetch_user['role'];
-    $user_image = $fetch_user['image'];   
-?>
+session_start(); // Essential if this file is accessed directly for logout
 
+// --- Crucial Cache Control Headers for this script only if it outputs anything ---
+// If it only redirects, these are less critical, but good practice.
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
+
+// Check if a logout request has been made
+if (isset($_GET['logout'])) {
+    // Clear all session variables
+    $_SESSION = array();
+
+    // Destroy the session
+    session_destroy();
+
+    // Redirect to the login page after logout
+    header('Location: PHP/login_form.php'); // Make sure this path is correct
+    exit(); // Always exit after a header redirect
+}
+
+// If this file is included by index.php and no logout is requested, it does nothing.
+// Any user detail fetching should be handled by the including script (index.php).
+?>
