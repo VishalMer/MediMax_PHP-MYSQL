@@ -50,7 +50,7 @@ if (isset($_POST['search'])) {
     </div>
     <header class="header">
         <a href="index.php" class="logo">
-            <img src="Images/MediMax_Logo1.png" alt="MediMax">
+            <img src="Images/MediMax_Logo.png" alt="MediMax">
         </a>
 
         <div class="search-bar">

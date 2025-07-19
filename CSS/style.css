@@ -614,4 +614,216 @@ body::-webkit-scrollbar{
  }
 
 
- 
+/* Contact Us */
+.container-contact{
+    margin-top: -3%;
+}
+
+.container-contact .headbar {
+    text-align: center;
+    background-color: rgb(9, 78, 126);
+    border-radius: 10px 0px 0px 10px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+}
+
+.container-contact .headbar .head {
+    color:white;
+    width: 5em;
+    margin-top: 4em;
+}
+
+.container-contact .main-content {
+    padding: 20px;
+    background: #fff;
+    border-radius: 0px 10px 10px 0px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    background-color: #b4dee7;
+    width: 100%;
+}
+
+.container-contact .main-content p{
+    font-weight: bold;
+    font-size: 11.5px;
+}
+
+.container-contact form {
+    display: flex;
+    flex-direction: column;
+}
+
+.container-contact form label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: rgb(9, 78, 126);
+    font-size: small;
+}
+
+.container-contact form label span{
+    position: absolute;
+    left: 40vw;
+    color: rgb(215, 80, 38);
+}
+
+.container-contact form input, form textarea {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-decoration: none;
+    
+    font-weight:bold;
+    font-family: Georgia, Felix Titling;  
+    text-transform:capitalize;
+}
+
+.container-contact form input[type="submit"] {
+    font-weight: bold;
+    background:rgb(9, 78, 126);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;    
+    letter-spacing: 1px; 
+    font-size: small;
+    font-weight: bold;
+
+}
+
+.container-contact form input[type="submit"]:hover{
+    background:#fff;
+    color: rgb(9, 78, 126);
+
+}
+
+
+/* Orders */
+.orders{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 11em 0 5em 0;
+}
+
+.orders table{
+    width: 90vw;
+    border-collapse: collapse;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    border: 2px solid #007BFF; /* Outer border; adjust color and thickness as needed */
+    border-radius: 10px; /* Rounded corners */
+    overflow: hidden; /* This is crucial to ensure the border-radius is applied to child elements */
+    min-height: 50vh; 
+}
+
+.orders table th{
+    background-color: rgb(9, 78, 126);
+    color: rgb(255, 255, 255);
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    height: 3.5em;
+}
+.orders table td{
+    background-color: rgba(9, 77, 126, 0);
+    font-size: 13px;
+    font-weight: bold;
+}
+.orders table th, .orders table td{
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.orders table tr td img{
+    height: 4em;
+    width: auto;
+    border-radius: 3px;
+}
+
+.orders table td h1{
+    padding: 12%;
+    font-size: 2em;
+    color: rgb(9, 78, 126);
+}
+
+/* hover effect on rows */
+.orders tr:hover {
+    background-color: #f1f1f1; /* Change background on hover */
+}
+
+
+
+/* About Us */
+.section{
+    width: 100%;
+}
+.hide{
+    display: none !important;
+  }
+.container{
+    width: 80%;
+    display: block;
+    margin: auto;
+    padding-top: 12.7em;
+}
+
+.content-section{
+    float: left;
+    width: 55%;
+}
+
+.container{
+    display: flex;
+    justify-content: space-evenly;
+}
+.container .image-section img{
+    height: 40rem;
+    margin-left:6em;
+    border-radius: 10px;
+    box-shadow: 0 0 1.4em rgb(39, 38, 38);
+}
+
+.content-section .title p{
+    text-transform: uppercase;
+    font-size: 33px;
+    font-family: Sitka small,Perpetua Titling MT,Papyrus;
+    font-weight: bold;
+}
+
+.show-more{
+    margin-top: 6%;
+    width: 80vw;
+    margin: auto;
+}
+
+.content-section .content h3, .show-more h3{
+    margin: 20px 0 0 -20px;
+    color: rgb(38, 84, 124);
+    font-size: 21px;
+    font-family: Sitka small,Perpetua Titling MT,Papyrus;
+}
+
+.content-section .content p, .show-more p{
+    margin: 10px 0 25px 0 ;
+    font-family: sans-serif;
+    font-size:18px;
+    line-height: 1.5;
+    font-family: Sitka small,Perpetua Titling MT,Papyrus;
+}
+
+.section button{
+    background-color: rgb(112, 171, 175);
+    padding: 12px 15px;
+    border-radius: 10px;
+    border: none;
+    margin-left: 10vw;
+    color: white;
+    font-size: 20px;
+    font-family: Sitka small,Perpetua Titling MT,Papyrus;
+    letter-spacing: 1.2px;
+    font-weight: bold;
+}
+
+.section button:hover{
+    background-color: #26547C;
+    cursor: pointer;
+}
