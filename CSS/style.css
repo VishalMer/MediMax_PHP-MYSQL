@@ -217,7 +217,7 @@ body::-webkit-scrollbar{
     top: 15%;           /* Vertically centers the element */
     left: 50%;          /* Horizontally centers the element */
     transform: translate(-50%, -50%); /* Corrects the centering offset */
-    z-index: 10;      /* Ensures it displays over other elements */
+    z-index: 10000;      /* Ensures it displays over other elements */
     width: max-content;         /* Adjust as needed to control the width */
     margin: 0 auto;     /* Centers the div itself */
     text-align: center; /* Centers the text inside the div */

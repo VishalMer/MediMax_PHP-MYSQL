@@ -9,20 +9,18 @@ header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // A date in the past
 // --- END: Crucial Cache Control Headers ---
 
 // Include your database connection FIRST
-include 'connection.php'; // Assuming 'config.php' is now 'connection.php'
+include 'connection.php'; 
 
 // Include the centralized user session and details logic.
 // This file handles session_start(), fetching user details ($user_id, $username, etc.),
-// and processing the `logout` GET parameter. It also initializes and manages the $message array.
-include 'user_session.php'; // user_session.php is in the same directory (PHP/)
+// and processing the `logout` GET parameter. It also initializes and manages the $_SESSION['message'] array.
+include 'user_session.php'; 
 
-// --- Enforce Login for Wishlist Page ---
-// If the user is not logged in ($user_id will be null as set by user_session.php),
-// redirect them to the login page with a message.
+// --- CRITICAL: If the user is not logged in redirect them to the login page with a message. ---
 if ($user_id === null) {
     $_SESSION['message'][] = 'Please login to view your wishlist.';
-    header('Location: login_form.php'); // Redirect to login form (relative to current directory)
-    exit();
+    header('Location: login_form.php'); 
+    exit(); // <<<--- This is the vital addition
 }
 
 // All subsequent operations will now safely use $user_id, $conn, and $_SESSION['message']
@@ -61,25 +59,29 @@ if (isset($_POST['search'])) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Your Wishlist - MediMax.com</title>
-    <link rel="stylesheet" href="../CSS/style.css"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Your Wishlist - MediMax.com</title>
+    <link rel="stylesheet" href="../CSS/style.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
 
     <div class="bcimage">
-        <img src="../Images/MediMax-BG.jpeg" alt="MediMax Background Image"> </div>
+        <img src="../Images/MediMax-BG.jpeg" alt="MediMax Background Image"> 
+    </div>
 
     <header class="header">
         <a href="../index.php" class="logo"> <img src="../Images/MediMax_Logo.png" alt="MediMax"> </a>
 
         <div class="search-bar">
-            <form method="post" action="wishlist.php"> <input type="search" name="search_input" placeholder="Search MediMax.com" id="search-input">
+            <form method="post" action="wishlist.php"> 
+                <input type="search" name="search_input" placeholder="Search MediMax.com" id="search-input">
                 <button type="submit" name="search" class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></button>
             </form>
         </div>
         
         <nav class="nav">
-            <a href="../index.php">Home</a> <a href="Products.php">Products</a>
+            <a href="../index.php">Home</a> 
+            <a href="Products.php">Products</a>
             <a href="Orders.php">Orders</a>
             <a href="AboutUs.php">About Us</a>
             <a href="Contact.php">Contact</a>
@@ -91,11 +93,13 @@ if (isset($_POST['search'])) {
             <button id="options">
                 <div class="pr-pic">
                     <?php if (!empty($user_image)): ?>
-                        <img src="../Images/<?php echo htmlspecialchars($user_image); ?>" alt="Profile Picture" style="width: 10px; height: 10px; margin-bottom: 1.5px; border-radius: 50%;"> <?php else: ?>
+                        <img src="../Images/<?php echo htmlspecialchars($user_image); ?>" alt="Profile Picture" style="width: 10px; height: 10px; margin-bottom: 1.5px; border-radius: 50%;"> 
+                    <?php else: ?>
                         <span><?php echo htmlspecialchars($firstLetter); ?></span>
                     <?php endif; ?>
                 </div>
-                <div id="userName"><?php echo htmlspecialchars($username); ?></div> </button>
+                <div id="userName"><?php echo htmlspecialchars($username); ?></div> 
+            </button>
         </div>
     </header>
         
@@ -116,7 +120,8 @@ if (isset($_POST['search'])) {
     // $message is now managed by user_session.php and available here
     if (!empty($_SESSION['message'])) { // Read from $_SESSION
         foreach ($_SESSION['message'] as $msg) {
-            echo '<div class="cart-msg message" onclick="this.remove();">' . htmlspecialchars($msg) . '</div>';
+            // Changed class to 'wishlist-msg message' for consistency with Cart.php if CSS requires it
+            echo '<div class="wishlist-msg message" onclick="this.remove();">' . htmlspecialchars($msg) . '</div>';
         }
         unset($_SESSION['message']); // Clear messages after displaying them
     }
@@ -133,12 +138,14 @@ if (isset($_POST['search'])) {
 
                     <?php
                         // Make sure $user_id is available here from user_session.php
+                        // This query will only run if $user_id is not null (i.e., user is logged in)
                         $wishlist_query_db = mysqli_query($conn, "SELECT * FROM `wishlist` WHERE user_id = '$user_id'") or die("query failed: " . mysqli_error($conn));
                         if (mysqli_num_rows($wishlist_query_db) > 0) {
                             while ($fetch_wishlist = mysqli_fetch_assoc($wishlist_query_db)) {
                         ?>
                         <div class="cart-box">
-                            <img src="../Images/<?php echo htmlspecialchars($fetch_wishlist['image']); ?>" alt="<?php echo htmlspecialchars($fetch_wishlist['name']); ?>"> <div class="product-detail">
+                            <img src="../Images/<?php echo htmlspecialchars($fetch_wishlist['image']); ?>" alt="<?php echo htmlspecialchars($fetch_wishlist['name']); ?>"> 
+                            <div class="product-detail">
                                 <h2><?php echo htmlspecialchars($fetch_wishlist['name']); ?></h2><br>
                                 <pre>Price : <span><i class="fa-solid fa-indian-rupee-sign"></i><?php echo htmlspecialchars($fetch_wishlist['price']); ?></span>
                                 </pre><br>
@@ -157,7 +164,8 @@ if (isset($_POST['search'])) {
                         ?>
                             <div class="empty-cart">
                                 <p> Your wishlist is empty </p>
-                                <a href='Products.php'><img src="../Images/Empty Cart.GIF" alt="Empty Cart"></a><br> <button><a href='Products.php'>Add Products Now</a></button>
+                                <a href='Products.php'><img src="../Images/Empty Cart.GIF" alt="Empty Cart"></a><br> 
+                                <button><a href='Products.php'>Add Products Now</a></button>
                             </div>
                         <?php
                             }
@@ -186,5 +194,6 @@ if (isset($_POST['search'])) {
         </table>
     </main>
         
-    <script src="../index.js"></script> </body>
+    <script src="../index.js"></script> 
+</body>
 </html>

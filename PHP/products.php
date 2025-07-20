@@ -2,6 +2,7 @@
 // PHP/products.php
 
 // --- START: Crucial Cache Control Headers for Products.php ---
+// Ensure these are at the absolute top of the file before ANY output
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
@@ -9,30 +10,29 @@ header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
 // --- END: Crucial Cache Control Headers ---
 
 // Include your database connection FIRST
-include 'connection.php'; // connection.php is in the same directory (PHP/)
+include 'connection.php';
 
 // Include the centralized user session and details logic.
-// This handles session_start(), user details ($user_id, $username, etc.), and $message array.
-include 'user_session.php'; // user_session.php is also in the same directory (PHP/)
+// This handles session_start(), user details ($user_id, $username, etc.).
+include 'user_session.php';
 
 // Include products_buttons.php for handling add to cart/wishlist actions.
-// This file will use the $user_id and $message array prepared by user_session.php.
+// This file will now strictly handle redirects if user is not logged in.
 include 'products_buttons.php';
 
 // Initialize search query and handle search input (specific to products.php)
 $search_query = '';
 if (isset($_POST['search'])) {
     $search_query = htmlspecialchars($_POST['search_input']);
-    // If search is submitted from products.php, re-process on this page, no redirect needed here.
-    // However, if the intent is to redirect to self with GET for cleaner URLs, do this:
-    // header('Location: products.php?search=' . urlencode($search_query));
-    // exit();
-} else if (isset($_GET['search'])) { // Handle search queries from other pages (like index.php)
+    header('Location: ' . $_SERVER['PHP_SELF'] . '?search=' . urlencode($search_query));
+    exit();
+} else if (isset($_GET['search'])) {
     $search_query = htmlspecialchars($_GET['search']);
 }
 
-// Note: $user_id, $username, $firstLetter, $user_role, $user_image, and $message
-// are all now populated by PHP/user_session.php.
+// Note: $user_id, $username, $firstLetter, $user_role, $user_image are populated by user_session.php.
+// $_SESSION['message'] will now only be set by products_buttons.php for success/failure messages
+// that display ON THIS PAGE.
 
 ?>
 
@@ -41,16 +41,18 @@ if (isset($_POST['search'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../CSS/style.css"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="../CSS/style.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Products - MediMax.com</title>
 </head>
-<body>
+<body style="min-height: 100vh;">
 
     <header class="header">
         <a href="../index.php" class="logo"> <img src="../Images/MediMax_Logo.png" alt="MediMax"> </a>
 
         <div class="search-bar">
-            <form method="post" action="products.php"> <input type="search" placeholder="Search MediMax.com" name="search_input" id="search-input" value="<?php echo htmlspecialchars($search_query); ?>">
+            <form method="post" action="products.php"> 
+                <input type="search" placeholder="Search MediMax.com" name="search_input" id="search-input" value="<?php echo htmlspecialchars($search_query); ?>">
                 <button type="submit" name="search" class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></button>
             </form>
         </div>
@@ -63,24 +65,29 @@ if (isset($_POST['search'])) {
         </nav>
 
         <div class="profile">
-            <?php if ($user_id !== null): ?> <button><a href="Wishlist.php"><i class="fa-solid fa-heart" style="color: #ff0000;"></i></a></button>
+            <?php if ($user_id !== null): ?> 
+                <button><a href="Wishlist.php"><i class="fa-solid fa-heart" style="color: #ff0000;"></i></a></button>
                 <button><a href="Cart.php"><i class="fa-solid fa-cart-plus"></i></a></button>
                 <button id="options">
                     <div class="pr-pic">
                         <?php if (!empty($user_image)): ?>
-                            <img src="../Images/<?php echo htmlspecialchars($user_image); ?>" alt="Profile Picture" style="width: 10px; height: 10px; margin-bottom: 1.5px; border-radius: 50%;"> <?php else: ?>
+                            <img src="../Images/<?php echo htmlspecialchars($user_image); ?>" alt="Profile Picture" style="width: 10px; height: 10px; margin-bottom: 1.5px; border-radius: 50%;"> 
+                        <?php else: ?>
                             <span><?php echo htmlspecialchars($firstLetter); ?></span>
                         <?php endif; ?>
                     </div>
-                    <div id="userName"><?php echo htmlspecialchars($username); ?></div> </button>
+                    <div id="userName"><?php echo htmlspecialchars($username); ?></div> 
+                </button>
             <?php else: ?>
                 <button>
-                    <a href="login_form.php">Login/Register</a> </button>
+                    <a href="login_form.php">Login/Register</a> 
+                </button>
             <?php endif; ?>
         </div>
     </header>
         
-    <?php if ($user_id !== null): ?> <div class="pr-options hide">
+    <?php if ($user_id !== null): ?> 
+        <div class="pr-options hide">
             <button><a href="Update Profile.php">Update User Profile <i class="fa-solid fa-address-card" style="color: #ffffff;"></i></a></button><br>
             <button><a href="Update Password.php">Change Password <i class="fa-solid fa-key" style="color: #ffffff;"></i></a></button><br>
             
@@ -97,16 +104,31 @@ if (isset($_POST['search'])) {
     <br><br><br><br><br>
         
 <?php
-// $message is now managed by user_session.php and available here
-if (!empty($message)) {
-    foreach ($message as $msg) { // Use $msg to avoid conflict with $message array variable
+// Retrieve and display messages from session (if set by products_buttons.php)
+if (isset($_SESSION['message']) && !empty($_SESSION['message'])) {
+    foreach ($_SESSION['message'] as $msg) {
         echo '<div class="message" onclick="this.remove();">' . htmlspecialchars($msg) . '</div>';
     }
+    unset($_SESSION['message']); // Clear messages after displaying
 }
 ?>
 
 <div class="shopping">
     <?php
+        // Fetch current cart and wishlist items for the logged-in user to properly set button states
+        $user_cart_items = [];
+        $user_wishlist_items = [];
+        if ($user_id !== null) {
+            $cart_res = mysqli_query($conn, "SELECT name FROM `cart` WHERE user_id = '$user_id'");
+            while ($row = mysqli_fetch_assoc($cart_res)) {
+                $user_cart_items[] = $row['name'];
+            }
+            $wishlist_res = mysqli_query($conn, "SELECT name FROM `wishlist` WHERE user_id = '$user_id'");
+            while ($row = mysqli_fetch_assoc($wishlist_res)) {
+                $user_wishlist_items[] = $row['name'];
+            }
+        }
+
         // Search products based on the search query
         if (!empty($search_query)) {
             $search_sql = mysqli_real_escape_string($conn, $search_query);
@@ -117,25 +139,26 @@ if (!empty($message)) {
 
         if (mysqli_num_rows($select_product) > 0) {
             while ($fetch_product = mysqli_fetch_assoc($select_product)) {
-                // Initialize $is_in_wishlist
-                $is_in_wishlist = false;
-                // Only check wishlist if user is logged in
-                if ($user_id !== null) { // Use $user_id from user_session.php
-                    $wishlist_check = mysqli_query($conn, "SELECT * FROM `wishlist` WHERE name = '" . mysqli_real_escape_string($conn, $fetch_product['name']) . "' AND user_id = '$user_id'") or die('Query failed: ' . mysqli_error($conn));
-                    $is_in_wishlist = mysqli_num_rows($wishlist_check) > 0;
-                }
-        ?>
-                    <form method="post" class="box" action="products.php"> <h2><?php echo htmlspecialchars($fetch_product['name']); ?></h2>
-                        <div class="box-img" style="background-image: url('../Images/<?php echo htmlspecialchars($fetch_product['image']); ?>')"></div> <div class="box-bottom">
+                $product_name = $fetch_product['name'];
+                $is_in_wishlist = in_array($product_name, $user_wishlist_items);
+                $is_in_cart = in_array($product_name, $user_cart_items); 
+    ?>
+                    <form method="post" class="box" action="products.php"> 
+                        <h2><?php echo htmlspecialchars($product_name); ?></h2>
+                        <div class="box-img" style="background-image: url('../Images/<?php echo htmlspecialchars($fetch_product['image']); ?>')"></div> 
+                        <div class="box-bottom">
                             <p>Price: <i class="fa-solid fa-indian-rupee-sign"></i> <strong><?php echo htmlspecialchars($fetch_product['price']); ?></strong></p>
-                            <?php if ($user_id !== null): ?> <button type="submit" name="add_to_cart" id="addToCart"><i class="fa-solid fa-cart-plus"></i></button>
+                            <?php if ($user_id !== null): ?> 
+                                <button type="submit" name="add_to_cart" id="addToCart" class="cart-btn">
+                                    <i class="fa-solid fa-cart-plus"></i>
+                                </button>
                                 <button type="submit" name="add_to_wishlist" id="add-wishlist" class="wishlist-btn">
                                     <i class="<?php echo $is_in_wishlist ? 'fa-solid fa-heart' : 'fa-regular fa-heart'; ?>" 
-                                       style="<?php echo $is_in_wishlist ? 'color: #ff0000;' : ''; ?>"></i>
+                                       style="<?php echo $is_in_wishlist ? 'color: #ff0000;' : ''; ?>"></i> 
                                 </button>
                             <?php else: ?>
-                                <button type="button" onclick="window.location.href='login_form.php';" title="Login to add to cart"><i class="fa-solid fa-cart-plus"></i></button>
-                                <button type="button" onclick="window.location.href='login_form.php';" title="Login to add to wishlist"><i class="fa-regular fa-heart"></i></button>
+                                <button type="submit" name="add_to_cart" title="Login to add to cart"><i class="fa-solid fa-cart-plus"></i></button>
+                                <button type="submit" name="add_to_wishlist" title="Login to add to wishlist"><i class="fa-regular fa-heart"></i></button>
                             <?php endif; ?>
                         </div><br>
 
@@ -151,7 +174,7 @@ if (!empty($message)) {
             ?>
 </div>
 
-    <footer class="footer" style="margin-top: 30px;">
+    <footer class="footer" >
         <div class="footer-icons">
             <a href="#"><i class="fa-brands fa-square-facebook" style="color: #0866ff;"></i></a>
             <a href="#"><i class="fa-brands fa-instagram" style="color: #f4109d;"></i></a>
@@ -164,7 +187,7 @@ if (!empty($message)) {
         <div class="footer-p">
             <p>MediMax.com</p>
             <p id="tc">Privacy Policy | Terms & Conditions</p> 
-            <p><i class="fa-regular fa-copyright"></i>2024 MediMax. All rights reserved.</p>           
+            <p><i class="fa-regular fa-copyright"></i>2024 MediMax. All rights reserved.</p>         
         </div>
 
         <div class="footer-p">
@@ -174,5 +197,6 @@ if (!empty($message)) {
 
     </footer>
 
-    <script src="../index.js"></script> </body>
+    <script src="../index.js"></script> 
+</body>
 </html>

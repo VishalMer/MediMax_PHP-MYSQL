@@ -32,13 +32,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         // Insert data into database
         // Default role could be 'user' or 'customer' in your database schema
-        $sql = "INSERT INTO users (name, email, password, roll) VALUES ('$name', '$email', '$password', 'user')"; // Added default 'roll'
-        
+        $sql = "INSERT INTO users (name, email, password, role) VALUES ('$name', '$email', '$password', 'user')"; // Added default 'role'
+
         if ($conn->query($sql) === TRUE) {
-            $_SESSION['message'][] = 'Registered successfully! You can now <a href="login_form.php">Login</a>';
+            $_SESSION['message'][] = 'Registered successfully! Now you can Login';
             // Optionally redirect to login page immediately after successful registration
-            // header('Location: login_form.php');
-            // exit();
+            header('Location: login_form.php');
+            exit();
         } else {
             $_SESSION['message'][] = "Error registering user: " . $conn->error;
         }

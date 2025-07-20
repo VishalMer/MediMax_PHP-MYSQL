@@ -1,38 +1,21 @@
 <?php
-// index.php
-
-// --- START: Crucial Cache Control Headers for Index.php ---
-// These headers tell the browser NOT to cache this page.
+// Cache Control Headers
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
-header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // A date in the past (effective for preventing caching)
-// --- END: Crucial Cache Control Headers ---
+header("Expires: Fri, 06 May 2005 05:00:00 GMT");
 
-// Include your database connection FIRST, so $conn is available for all subsequent includes/queries.
-include 'PHP/connection.php'; // This should define $conn
+include 'PHP/connection.php';
+include 'PHP/user_session.php'; // This now only sets $user_id, etc. and handles direct logout
+include 'PHP/products_buttons.php'; // This sets $_SESSION['message'] for success/failure
 
-// Include the centralized user session and details logic.
-// This file will now handle session_start(), fetching user details ($user_id, $username, etc.),
-// and processing the `logout` GET parameter. It also initializes and manages the $message array.
-include 'PHP/user_session.php';
-
-// Include products_buttons.php for handling add to cart/wishlist actions.
-// This file will use the $user_id and $message array prepared by user_session.php.
-include 'PHP/products_buttons.php';
-
-// Initialize search query to prevent undefined variable notice
-// This remains specific to index.php's display and immediate handling.
 $search_query = '';
 if (isset($_POST['search'])) {
     $search_query = htmlspecialchars($_POST['search_input']);
-    // If you want search to actually redirect to products.php, add that here:
-    // header('Location: PHP/Products.php?search=' . urlencode($search_query));
-    // exit();
+    //redirect to products page on searching
+    header('Location: PHP/Products.php?search=' . urlencode($search_query));
+    exit();
 }
-
-// Note: $user_id, $username, $firstLetter, $user_role, $user_image, and $message
-// are all now populated by PHP/user_session.php. You no longer need to manually initialize or fetch them here.
 ?>
 
 <!DOCTYPE html>
@@ -87,7 +70,7 @@ if (isset($_POST['search'])) {
         </div>
     </header>
     
-    <?php if ($user_id !== null): ?> <div class="pr-options hide">
+    <?php if ($user_id !== null): ?> <div class="pr-options ">
             <button><a href="PHP/Update Profile.php">Update User Profile <i class="fa-solid fa-address-card" style="color: #ffffff;"></i></a></button><br>
             <button><a href="PHP/Update Password.php">Change Password <i class="fa-solid fa-key" style="color: #ffffff;"></i></a></button><br>
 
@@ -103,11 +86,13 @@ if (isset($_POST['search'])) {
 
     <section class="main">
         <?php
-        // Display messages from $_SESSION['message'] (now managed by user_session.php)
-        if (!empty($message)) {
-            foreach ($message as $msg) {
-                echo '<div class="message" onclick="this.remove();">'.$msg.'</div>';
+        // IMPORTANT: Message display for index.php (was missing)
+        // Retrieve and display messages from session (if set by products_buttons.php)
+        if (isset($_SESSION['message']) && !empty($_SESSION['message'])) {
+            foreach ($_SESSION['message'] as $msg) {
+                echo '<div class="message" onclick="this.remove();">' . htmlspecialchars($msg) . '</div>';
             }
+            unset($_SESSION['message']); // Clear messages after displaying
         }
         ?>
 
@@ -131,6 +116,20 @@ if (isset($_POST['search'])) {
 
        <div class="shopping"> 
         <?php
+            // Fetch current cart and wishlist items for the logged-in user to properly set button states
+            $user_cart_items = [];
+            $user_wishlist_items = [];
+            if ($user_id !== null) {
+                $cart_res = mysqli_query($conn, "SELECT name FROM `cart` WHERE user_id = '$user_id'");
+                while ($row = mysqli_fetch_assoc($cart_res)) {
+                    $user_cart_items[] = $row['name'];
+                }
+                $wishlist_res = mysqli_query($conn, "SELECT name FROM `wishlist` WHERE user_id = '$user_id'");
+                while ($row = mysqli_fetch_assoc($wishlist_res)) {
+                    $user_wishlist_items[] = $row['name'];
+                }
+            }
+
             // Search products based on the search query
             if (!empty($search_query)) {
                 $search_sql = mysqli_real_escape_string($conn, $search_query);
@@ -150,25 +149,25 @@ if (isset($_POST['search'])) {
                         $is_in_wishlist = mysqli_num_rows($wishlist_check) > 0;
                     }
             ?>
-                    <form method="post" class="box" action="index.php"> <h2><?php echo htmlspecialchars($fetch_product['name']); ?></h2>
-                        <div class="box-img" style="background-image: url('Images/<?php echo htmlspecialchars($fetch_product['image']); ?>')"></div>
-                        <div class="box-bottom">
-                            <p>Price: <i class="fa-solid fa-indian-rupee-sign"></i> <strong><?php echo htmlspecialchars($fetch_product['price']); ?></strong></p>
-                            <?php if ($user_id !== null): ?> <button type="submit" name="add_to_cart" id="addToCart"><i class="fa-solid fa-cart-plus"></i></button>
-                                <button type="submit" name="add_to_wishlist" id="add-wishlist" class="wishlist-btn">
-                                    <i class="<?php echo $is_in_wishlist ? 'fa-solid fa-heart' : 'fa-regular fa-heart'; ?>" 
-                                       style="<?php echo $is_in_wishlist ? 'color: #ff0000;' : ''; ?>"></i>
-                                </button>
-                            <?php else: ?>
-                                <button type="button" onclick="window.location.href='PHP/login_form.php';" title="Login to add to cart"><i class="fa-solid fa-cart-plus"></i></button>
-                                <button type="button" onclick="window.location.href='PHP/login_form.php';" title="Login to add to wishlist"><i class="fa-regular fa-heart"></i></button>
-                            <?php endif; ?>
-                        </div><br>
+                        <form method="post" class="box" action="index.php"> <h2><?php echo htmlspecialchars($fetch_product['name']); ?></h2>
+                            <div class="box-img" style="background-image: url('Images/<?php echo htmlspecialchars($fetch_product['image']); ?>')"></div>
+                            <div class="box-bottom">
+                                <p>Price: <i class="fa-solid fa-indian-rupee-sign"></i> <strong><?php echo htmlspecialchars($fetch_product['price']); ?></strong></p>
+                                <?php if ($user_id !== null): ?> <button type="submit" name="add_to_cart" id="addToCart"><i class="fa-solid fa-cart-plus"></i></button>
+                                    <button type="submit" name="add_to_wishlist" id="add-wishlist" class="wishlist-btn">
+                                        <i class="<?php echo $is_in_wishlist ? 'fa-solid fa-heart' : 'fa-regular fa-heart'; ?>" 
+                                           style="<?php echo $is_in_wishlist ? 'color: #ff0000;' : ''; ?>"></i>
+                                    </button>
+                                <?php else: ?>
+                                    <button type="submit" name="add_to_cart" title="Login to add to cart"><i class="fa-solid fa-cart-plus"></i></button>
+                                    <button type="submit" name="add_to_wishlist" title="Login to add to wishlist"><i class="fa-regular fa-heart"></i></button>
+                                <?php endif; ?>
+                            </div><br>
 
-                        <input type="hidden" name="product_image" value="<?php echo htmlspecialchars($fetch_product['image']); ?>">
-                        <input type="hidden" name="product_name" value="<?php echo htmlspecialchars($fetch_product['name']); ?>">
-                        <input type="hidden" name="product_price" value="<?php echo htmlspecialchars($fetch_product['price']); ?>">
-                    </form>
+                            <input type="hidden" name="product_image" value="<?php echo htmlspecialchars($fetch_product['image']); ?>">
+                            <input type="hidden" name="product_name" value="<?php echo htmlspecialchars($fetch_product['name']); ?>">
+                            <input type="hidden" name="product_price" value="<?php echo htmlspecialchars($fetch_product['price']); ?>">
+                        </form>
             <?php
                 }
             } else {
@@ -191,7 +190,7 @@ if (isset($_POST['search'])) {
         <div class="footer-p">
             <p>MediMax.com</p>
             <p id="tc">Privacy Policy | Terms & Conditions</p> 
-            <p><i class="fa-regular fa-copyright"></i>2024 MediMax. All rights reserved.</p>         
+            <p><i class="fa-regular fa-copyright"></i>2025 MediMax. All rights reserved.</p>         
         </div>
 
         <div class="footer-p">
