@@ -11,6 +11,7 @@ $username = 'Guest';
 $firstLetter = 'G';
 $user_role = 'guest';
 $user_image = '';
+$user_email = '';
 
 // Check if $conn exists (it should be included before user_session.php if it's used here)
 if (isset($conn) && isset($_SESSION['user_id'])) {
@@ -23,12 +24,13 @@ if (isset($conn) && isset($_SESSION['user_id'])) {
         $firstLetter = strtoupper($username[0]);
         $user_role = $fetch_user['role'];
         $user_image = $fetch_user['image'];
+        $user_email = $fetch_user['email'];
     } else {
         // User ID in session but not in DB, force logout
         session_unset();
         session_destroy();
         // Redirect to login form. Make sure this header is not preceded by any output.
-        header('Location: login_form.php?logout=true');
+        header('Location: ./login_form.php?logout=true');
         exit();
     }
 } else if (!isset($conn)) {
