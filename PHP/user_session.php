@@ -44,7 +44,7 @@ if (isset($_GET['logout'])) {
     $_SESSION = array(); // Clear all session data
     session_destroy();
     // Redirect. Make sure this header is not preceded by any output.
-    header('Location: login_form.php'); // Or '../index.php' if that's your logout destination
+    header('Location: /medimax/PHP/login_form.php'); // Or '../index.php' if that's your logout destination
     exit();
 }
 

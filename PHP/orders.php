@@ -73,8 +73,8 @@ if (isset($_POST['search'])) {
         </nav>
 
         <div class="profile">
-            <button><a href="Wishlist.php"><i class="fa-solid fa-heart" style="color: #ff0000;"></i></a></button>
-            <button><a href="Cart.php"><i class="fa-solid fa-cart-plus"></i></a></button>
+                <a href="Wishlist.php"><button><i class="fa-solid fa-heart" style="color: #ff0000;"></i></button></a>
+                <a href="Cart.php"><button><i class="fa-solid fa-cart-plus"></i></button></a>
             <button id="options">
                 <div class="pr-pic">
                     <?php if (!empty($user_image)): ?>

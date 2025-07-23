@@ -6,8 +6,8 @@ header("Pragma: no-cache");
 header("Expires: Fri, 06 May 2005 05:00:00 GMT");
 
 include 'PHP/connection.php';
-include 'PHP/user_session.php'; // This now only sets $user_id, etc. and handles direct logout
-include 'PHP/products_buttons.php'; // This sets $_SESSION['message'] for success/failure
+include 'PHP/user_session.php'; 
+include 'PHP/products_buttons.php';
 
 $search_query = '';
 if (isset($_POST['search'])) {
@@ -51,8 +51,9 @@ if (isset($_POST['search'])) {
         </nav>
 
         <div class="profile">
-        <?php if ($user_id !== null): ?> <button><a href="PHP/Wishlist.php"><i class="fa-solid fa-heart" style="color: #ff0000;"></i></a></button>
-            <button><a href="PHP/cart.php"><i class="fa-solid fa-cart-plus"></i></a></button>
+        <?php if ($user_id !== null): ?>
+                <a href="PHP/Wishlist.php"><button><i class="fa-solid fa-heart" style="color: #ff0000;"></i></button></a>
+                <a href="PHP/cart.php"><button><i class="fa-solid fa-cart-plus"></i></button></a>
             <button id="options">
                 <div class="pr-pic">
                     <?php if (!empty($user_image)): ?>
@@ -63,9 +64,9 @@ if (isset($_POST['search'])) {
                 </div>
                 <div id="userName"><?php echo htmlspecialchars($username); ?></div> </button>
         <?php else: ?>
-            <button>
-                <a href="PHP/login_form.php">Login/Register</a>
-            </button>
+            <a href="PHP/login_form.php">
+                <button>Login/Register <i class="fa-solid fa-user-plus"></i></button>
+            </a>
         <?php endif; ?>
         </div>
     </header>
@@ -86,13 +87,11 @@ if (isset($_POST['search'])) {
 
     <section class="main">
         <?php
-        // IMPORTANT: Message display for index.php (was missing)
-        // Retrieve and display messages from session (if set by products_buttons.php)
         if (isset($_SESSION['message']) && !empty($_SESSION['message'])) {
             foreach ($_SESSION['message'] as $msg) {
                 echo '<div class="message" onclick="this.remove();">' . htmlspecialchars($msg) . '</div>';
             }
-            unset($_SESSION['message']); // Clear messages after displaying
+            unset($_SESSION['message']); 
         }
         ?>
 
@@ -116,7 +115,7 @@ if (isset($_POST['search'])) {
 
        <div class="shopping"> 
         <?php
-            // Fetch current cart and wishlist items for the logged-in user to properly set button states
+        //fetch cart and wishlist for user
             $user_cart_items = [];
             $user_wishlist_items = [];
             if ($user_id !== null) {
@@ -130,7 +129,7 @@ if (isset($_POST['search'])) {
                 }
             }
 
-            // Search products based on the search query
+            // Search products 
             if (!empty($search_query)) {
                 $search_sql = mysqli_real_escape_string($conn, $search_query);
                 $select_product = mysqli_query($conn, "SELECT * FROM `products` WHERE name LIKE '%$search_sql%'") or die('Query failed: ' . mysqli_error($conn));
@@ -140,10 +139,9 @@ if (isset($_POST['search'])) {
 
             if (mysqli_num_rows($select_product) > 0) {
                 while ($fetch_product = mysqli_fetch_assoc($select_product)) {
-                    // Initialize $is_in_wishlist
+                    // Initialize
                     $is_in_wishlist = false;
-                    // Only check wishlist if user is logged in
-                    // $user_id is now provided by user_session.php
+                    // check wishlist if user is logged in
                     if ($user_id !== null) {
                         $wishlist_check = mysqli_query($conn, "SELECT * FROM `wishlist` WHERE name = '" . mysqli_real_escape_string($conn, $fetch_product['name']) . "' AND user_id = '$user_id'") or die('Query failed: ' . mysqli_error($conn));
                         $is_in_wishlist = mysqli_num_rows($wishlist_check) > 0;

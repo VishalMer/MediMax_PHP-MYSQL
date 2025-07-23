@@ -66,8 +66,8 @@ if (isset($_POST['search'])) {
 
         <div class="profile">
             <?php if ($user_id !== null): ?> 
-                <button><a href="Wishlist.php"><i class="fa-solid fa-heart" style="color: #ff0000;"></i></a></button>
-                <button><a href="Cart.php"><i class="fa-solid fa-cart-plus"></i></a></button>
+                <a href="Wishlist.php"><button><i class="fa-solid fa-heart" style="color: #ff0000;"></i></button></a>
+                <a href="Cart.php"><button><i class="fa-solid fa-cart-plus"></i></button></a>
                 <button id="options">
                     <div class="pr-pic">
                         <?php if (!empty($user_image)): ?>
@@ -79,9 +79,9 @@ if (isset($_POST['search'])) {
                     <div id="userName"><?php echo htmlspecialchars($username); ?></div> 
                 </button>
             <?php else: ?>
-                <button>
-                    <a href="login_form.php">Login/Register</a> 
-                </button>
+                <a href="login_form.php">
+                    <button>Login/Register <i class="fa-solid fa-user-plus"></i></button>
+                </a>
             <?php endif; ?>
         </div>
     </header>
