@@ -121,7 +121,7 @@ if (isset($_POST['search'])) {
     if (!empty($_SESSION['message'])) { // Read from $_SESSION
         foreach ($_SESSION['message'] as $msg) {
             // Changed class to 'wishlist-msg message' for consistency with Cart.php if CSS requires it
-            echo '<div class="wishlist-msg message" onclick="this.remove();">' . htmlspecialchars($msg) . '</div>';
+            echo '<div class="cart-msg message" onclick="this.remove();">' . htmlspecialchars($msg) . '</div>';
         }
         unset($_SESSION['message']); // Clear messages after displaying them
     }
@@ -194,6 +194,6 @@ if (isset($_POST['search'])) {
         </table>
     </main>
         
-    <script src="../index.js"></script> 
+    <script src="../JS/index.js"></script> 
 </body>
 </html>

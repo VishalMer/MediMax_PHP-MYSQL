@@ -197,6 +197,6 @@ if (isset($_SESSION['message']) && !empty($_SESSION['message'])) {
 
     </footer>
 
-    <script src="../index.js"></script> 
+    <script src="../JS/index.js"></script> 
 </body>
 </html>

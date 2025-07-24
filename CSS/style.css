@@ -74,50 +74,50 @@ body::-webkit-scrollbar{
 }
 
 .search-bar {
-    display: flex; /* Use flexbox to align items in a row */
-    align-items: center; /* Center items vertically */
-    justify-content: center; /* Center items horizontally or change to 'flex-start' for left alignment */
-    margin: 10px 0; /* Add some margin for spacing */
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    margin: 10px 0; 
     
 }
 
 #search-input {
-    padding: 11px 10px 10px 10px; /* Add padding for better touch target */
+    padding: 11px 10px 10px 10px; 
     border: 3px solid #70ABAF;
-    border-radius: 5px 0 0 5px; /* Rounded corners */
-    width: 300px; /* Set a width for the input */
-    height: 40px; /* Same height as the button */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    outline: none; /* Remove default outline */
+    border-radius: 5px 0 0 5px; 
+    width: 300px; 
+    height: 40px; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+    outline: none; 
     font-weight:bold;
     font-family: Georgia, Felix Titling;  
     text-transform:capitalize;    
 }
 
 .search-icon {
-    background-color: #70ABAF; /* Button background color */
-    border: none; /* Remove border */
-    border-radius: 0 5px 5px 0; /* Rounded corners */
-    height: 40px; /* Same height as the input */
-    padding: 1px 14px; /* Padding for the button */
-    cursor: pointer; /* Show pointer cursor on hover */
-    align-items: center; /* Center icon vertically */
+    background-color: #70ABAF; 
+    border: none; 
+    border-radius: 0 5px 5px 0; 
+    height: 40px; 
+    padding: 1px 14px; 
+    cursor: pointer; 
+    align-items: center; 
 }
 
 .search-icon i {
-    color: white; /* Change icon color */
-    font-size: 1.7rem; /* Icon size */
+    color: white; 
+    font-size: 1.7rem; 
 }
 
 .search-icon:hover {
-    background-color: #094e7e;  /* Darker blue on hover */
+    background-color: #094e7e; 
 }
 #search-input, .search-icon {
     transition: 0.3s ease;
 }
 
 #search-input:focus {
-    box-shadow: 0 0 7px rgba(9, 78, 126, 0.5); /* Highlight input on focus */
+    box-shadow: 0 0 7px rgba(9, 78, 126, 0.5);
     border: 2px solid #094e7e;
 }
 
@@ -180,7 +180,7 @@ body::-webkit-scrollbar{
 
 .header .profile button:hover, .mainText button:hover, .box button:hover, .box-bottom #addToCart:hover, .pr-options button:hover, .empty-cart button:hover{
    background-color: #26547C;
-   transform: scale(1.05); /* Slight scale effect on hover */
+   transform: scale(1.05); 
 }
 
 
@@ -196,7 +196,11 @@ body::-webkit-scrollbar{
     display: flex; 
     flex-direction: column;
     align-items: flex-end;
-    animation: fadeIn 0.23s ease-in; /* Fade in effect */
+    animation: fadeIn 0.23s ease-in; 
+}
+
+.hide{
+    display: none !important;
 }
 
 .pr-options button{
@@ -213,17 +217,17 @@ body::-webkit-scrollbar{
 }
 
 .message{
-    position: fixed; /* Makes sure the element can overlap other elements */
-    top: 15%;           /* Vertically centers the element */
-    left: 50%;          /* Horizontally centers the element */
-    transform: translate(-50%, -50%); /* Corrects the centering offset */
-    z-index: 10000;      /* Ensures it displays over other elements */
-    width: max-content;         /* Adjust as needed to control the width */
-    margin: 0 auto;     /* Centers the div itself */
-    text-align: center; /* Centers the text inside the div */
-    background-color: rgb(0, 0, 0); /* Optional: translucent background */
-    padding: 10px 20px;      /* Optional: some padding for aesthetics */
-    border: 1px solid #ccc; /* Optional: a border for better visibility */
+    position: fixed; 
+    top: 17%; 
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10000; 
+    width: max-content;
+    margin: 0 auto;
+    text-align: center;
+    background-color: rgb(0, 0, 0);
+    padding: 10px 20px;
+    border: 1px solid #ccc;
     border-radius: 40px;
     color: #ffffff;
     font-size: 12px;
@@ -241,7 +245,7 @@ body::-webkit-scrollbar{
     font-weight: 600;
     color:#26547C;
     text-shadow: 0 0px 35px rgb(255, 255, 255);
-    animation: fadeInUp 0.5s ease-in-out; /* Animation for main heading */
+    animation: fadeInUp 0.5s ease-in-out;
     
 }
 
@@ -251,7 +255,7 @@ body::-webkit-scrollbar{
     font-weight: 600;
     color:rgb(112, 171, 175);
     text-shadow: 0 0px 35px rgb(255, 255, 255);
-    animation: fadeInUp 0.5s ease-in-out; /* Animation for main heading */
+    animation: fadeInUp 0.5s ease-in-out;
 }
 
 .mainText h2 span{
@@ -265,7 +269,7 @@ body::-webkit-scrollbar{
     font-size: 1.5rem;
     color:rgb(9, 78, 126);
     font-weight:bold;
-    animation: fadeInUp 0.5s ease-in-out; /* Animation for paragraph */
+    animation: fadeInUp 0.5s ease-in-out; 
 }
 
 .mainText{
@@ -355,7 +359,7 @@ body::-webkit-scrollbar{
 }
 
 .box:hover, .cart-box:hover{    
-    transform: scale(1.05); /* Slightly scale up on hover */
+    transform: scale(1.05); 
     box-shadow: 0 0 1.4em rgb(9, 78, 126); 
 }
 
@@ -385,7 +389,7 @@ body::-webkit-scrollbar{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    animation: fadeInUp 0.5s ease-in-out; /* Fade in effect for footer */
+    animation: fadeInUp 0.5s ease-in-out; 
 }
 
 .footer .footer-icons a{
@@ -417,8 +421,6 @@ body::-webkit-scrollbar{
     text-shadow: 0 0px 19px rgb(0, 0, 0);
 }
 
-
-/* Cart CSS */
 
 /* Cart */
 .cart-boxes::-webkit-scrollbar{
@@ -709,9 +711,9 @@ body::-webkit-scrollbar{
     border-collapse: collapse;
     text-align: center;
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
-    border: 2px solid #007BFF; /* Outer border; adjust color and thickness as needed */
-    border-radius: 10px; /* Rounded corners */
-    overflow: hidden; /* This is crucial to ensure the border-radius is applied to child elements */
+    border: 2px solid #007BFF; 
+    border-radius: 10px; 
+    overflow: hidden; 
     min-height: 50vh; 
 }
 
@@ -745,9 +747,8 @@ body::-webkit-scrollbar{
     color: rgb(9, 78, 126);
 }
 
-/* hover effect on rows */
 .orders tr:hover {
-    background-color: #f1f1f1; /* Change background on hover */
+    background-color: #f1f1f1; 
 }
 
 

@@ -270,6 +270,6 @@ if (isset($_POST['search'])) {
             </table>
     </main>
         
-    <script src="../index.js"></script> 
+    <script src="../JS/index.js"></script> 
 </body>
 </html>

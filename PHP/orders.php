@@ -175,6 +175,7 @@ if (isset($_POST['search'])) {
             <p>Contact Us: +91 1234567890</p>
             <p>Email: support@medimax.com</p> </div>
     </footer>
-    
-    <script src="../index.js"></script> </body>
+
+    <script src="../JS/index.js"></script>
+</body>
 </html>

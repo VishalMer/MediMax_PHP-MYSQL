@@ -71,7 +71,7 @@ if (isset($_POST['search'])) {
         </div>
     </header>
     
-    <?php if ($user_id !== null): ?> <div class="pr-options ">
+    <?php if ($user_id !== null): ?> <div class="pr-options hide">
             <button><a href="PHP/Update Profile.php">Update User Profile <i class="fa-solid fa-address-card" style="color: #ffffff;"></i></a></button><br>
             <button><a href="PHP/Update Password.php">Change Password <i class="fa-solid fa-key" style="color: #ffffff;"></i></a></button><br>
 
@@ -197,6 +197,6 @@ if (isset($_POST['search'])) {
         </div>
     </footer>
     
-    <script src="index.js"></script>
+    <script src="JS/index.js"></script>
 </body>
 </html>

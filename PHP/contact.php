@@ -175,6 +175,6 @@ if (isset($_POST['search'])) {
 
     </footer>
 
-    <script src="../index.js"></script>
+    <script src="../JS/index.js"></script> 
 </body>
 </html>
