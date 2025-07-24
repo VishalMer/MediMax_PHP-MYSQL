@@ -99,7 +99,7 @@ if (!empty($_SESSION['message'])) {
     <form method="post" id="registrationForm" action="register_form.php">
         <div class="form-group">
             <input type="text" id="username" name="name" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>" >
-            <label for="username">Full Name </label><br>
+            <label for="username">User Name </label><br>
         </div>
         <p id="usernameError" class="error"></p>
 

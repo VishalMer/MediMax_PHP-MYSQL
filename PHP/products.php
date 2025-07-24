@@ -1,26 +1,14 @@
 <?php
-// PHP/products.php
 
-// --- START: Crucial Cache Control Headers for Products.php ---
-// Ensure these are at the absolute top of the file before ANY output
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
-// --- END: Crucial Cache Control Headers ---
 
-// Include your database connection FIRST
 include 'connection.php';
-
-// Include the centralized user session and details logic.
-// This handles session_start(), user details ($user_id, $username, etc.).
 include 'user_session.php';
-
-// Include products_buttons.php for handling add to cart/wishlist actions.
-// This file will now strictly handle redirects if user is not logged in.
 include 'products_buttons.php';
 
-// Initialize search query and handle search input (specific to products.php)
 $search_query = '';
 if (isset($_POST['search'])) {
     $search_query = htmlspecialchars($_POST['search_input']);
@@ -29,10 +17,6 @@ if (isset($_POST['search'])) {
 } else if (isset($_GET['search'])) {
     $search_query = htmlspecialchars($_GET['search']);
 }
-
-// Note: $user_id, $username, $firstLetter, $user_role, $user_image are populated by user_session.php.
-// $_SESSION['message'] will now only be set by products_buttons.php for success/failure messages
-// that display ON THIS PAGE.
 
 ?>
 
@@ -104,12 +88,11 @@ if (isset($_POST['search'])) {
     <br><br><br><br><br>
         
 <?php
-// Retrieve and display messages from session (if set by products_buttons.php)
 if (isset($_SESSION['message']) && !empty($_SESSION['message'])) {
     foreach ($_SESSION['message'] as $msg) {
         echo '<div class="message" onclick="this.remove();">' . htmlspecialchars($msg) . '</div>';
     }
-    unset($_SESSION['message']); // Clear messages after displaying
+    unset($_SESSION['message']); 
 }
 ?>
 
@@ -129,7 +112,7 @@ if (isset($_SESSION['message']) && !empty($_SESSION['message'])) {
             }
         }
 
-        // Search products based on the search query
+        // Search products query
         if (!empty($search_query)) {
             $search_sql = mysqli_real_escape_string($conn, $search_query);
             $select_product = mysqli_query($conn, "SELECT * FROM `products` WHERE name LIKE '%$search_sql%'") or die('Query failed: ' . mysqli_error($conn));

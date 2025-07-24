@@ -3,9 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const optionsDiv = document.querySelector('.pr-options');
     const optionsButton = document.getElementById('options');
 
-    // Ensure optionsDiv exists and is initially hidden
     if (optionsDiv) {
-        optionsDiv.classList.add('hide'); // Add hide class to ensure it's hidden by default
+        optionsDiv.classList.add('hide'); // hide by default
     }
 
     // Function to hide options
@@ -15,12 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Add click event listener to the window to hide options
-    // This listener will only be active if optionsButton exists
     if (optionsButton) {
         window.addEventListener('click', (event) => {
-            // Check if the click was outside the options button and the options div
-            // and if the options div is currently visible (not hidden)
             if (optionsDiv && !optionsDiv.classList.contains('hide') &&
                 event.target !== optionsButton &&
                 !optionsButton.contains(event.target) &&
@@ -29,13 +24,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Add scroll event listener to the window to hide options
         window.addEventListener('scroll', hideProfileOptions);
 
-        // Add click event listener to the options button
         optionsButton.addEventListener('click', (event) => {
             if (optionsDiv) {
-                optionsDiv.classList.toggle('hide'); // Toggle hide class
+                optionsDiv.classList.toggle('hide');
             }
             event.stopPropagation(); // Prevent the click from bubbling up to the window
         });
@@ -47,10 +40,9 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('DOMContentLoaded', (event) => {
     const messageDiv = document.querySelector('.message');
     if (messageDiv) {
-        // Hide the div after 3 seconds
         setTimeout(() => {
             messageDiv.style.display = 'none';
-        }, 2000);
+        }, 2200);
     }
 });
 
@@ -66,21 +58,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 /*--- function for User name splitting ---*/
-// Using DOMContentLoaded instead of window.onload for better practice,
-// as window.onload waits for all resources (images, etc.)
 document.addEventListener('DOMContentLoaded', () => {
     let userNameElement = document.getElementById("userName");
-    if (userNameElement) { // Check if the element exists
+    if (userNameElement) { 
         let userName = userNameElement.textContent || userNameElement.innerText;
 
-        userName = userName.split(' ')[0]; // Take the part before the first space
+        userName = userName.split(' ')[0]; 
 
-        // Check the length and apply the necessary transformation
         if (userName.length > 6) {
-            userName = userName.substring(0, 5) + ".."; // Trim to 5 characters + ".."
+            userName = userName.substring(0, 4) + ".."; 
         }
-
-        //set it back to username and display it.
         userNameElement.textContent = userName;
     }
 });

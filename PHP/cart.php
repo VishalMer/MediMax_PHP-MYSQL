@@ -192,12 +192,11 @@ if (isset($_POST['search'])) {
     <main class="cart">
 
     <?php
-    // $message is now managed by user_session.php and available here
-    if(!empty($_SESSION['message'])){ // Use $_SESSION['message'] for reading
-        foreach($_SESSION['message'] as $msg){ // Use $msg to avoid conflict with $message array variable
-            echo '<div class="cart-msg message" onclick="this.remove();">'.htmlspecialchars($msg).'</div>'; // htmlspecialchars for safety
+    if(!empty($_SESSION['message'])){ 
+        foreach($_SESSION['message'] as $msg){ 
+            echo '<div class="cart-msg message" onclick="this.remove();">'.htmlspecialchars($msg).'</div>'; 
         }
-        unset($_SESSION['message']); // Clear messages after displaying them
+        unset($_SESSION['message']);
     }
     ?>
 
@@ -210,7 +209,6 @@ if (isset($_POST['search'])) {
                         <div class="cart-boxes">
                             <?php
                                 $grand_total = 0;
-                                // Make sure $user_id is available here from user_session.php
                                 $cart_query = mysqli_query($conn, "SELECT * FROM `cart` WHERE user_id = '$user_id'") or die("query failed: " . mysqli_error($conn));
                                 if (mysqli_num_rows($cart_query) > 0) {
                                     while ($fetch_cart = mysqli_fetch_assoc($cart_query)) {

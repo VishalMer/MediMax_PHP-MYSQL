@@ -117,13 +117,12 @@ if (isset($_POST['search'])) {
     </div>
 
     <?php
-    // $message is now managed by user_session.php and available here
-    if (!empty($_SESSION['message'])) { // Read from $_SESSION
+    
+    if (!empty($_SESSION['message'])) { 
         foreach ($_SESSION['message'] as $msg) {
-            // Changed class to 'wishlist-msg message' for consistency with Cart.php if CSS requires it
             echo '<div class="cart-msg message" onclick="this.remove();">' . htmlspecialchars($msg) . '</div>';
         }
-        unset($_SESSION['message']); // Clear messages after displaying them
+        unset($_SESSION['message']);
     }
     ?>
 
@@ -137,8 +136,6 @@ if (isset($_POST['search'])) {
                     <div class="cart-boxes">
 
                     <?php
-                        // Make sure $user_id is available here from user_session.php
-                        // This query will only run if $user_id is not null (i.e., user is logged in)
                         $wishlist_query_db = mysqli_query($conn, "SELECT * FROM `wishlist` WHERE user_id = '$user_id'") or die("query failed: " . mysqli_error($conn));
                         if (mysqli_num_rows($wishlist_query_db) > 0) {
                             while ($fetch_wishlist = mysqli_fetch_assoc($wishlist_query_db)) {
