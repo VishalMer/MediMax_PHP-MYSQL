@@ -62,7 +62,8 @@ if (isset($_POST['search'])) {
                         <span><?php echo htmlspecialchars($firstLetter); ?></span>
                     <?php endif; ?>
                 </div>
-                <div id="userName"><?php echo htmlspecialchars($username); ?></div> </button>
+                <div id="userName"><?php echo htmlspecialchars($username); ?></div> 
+            </button>
         <?php else: ?>
             <a href="PHP/login_form.php">
                 <button>Login/Register <i class="fa-solid fa-user-plus"></i></button>
@@ -76,7 +77,7 @@ if (isset($_POST['search'])) {
             <button><a href="PHP/Update Password.php">Change Password <i class="fa-solid fa-key" style="color: #ffffff;"></i></a></button><br>
 
             <?php if ($user_role === 'admin' || $user_role === 'owner') { ?>
-                <button><a href="PHP/AdminPanel.php" target="_blank">Admin Panel <i class="fa-solid fa-user-tie"></i></a></button><br>
+                <button><a href="PHP/admin/adminPanel.php" target="_blank">Admin Panel <i class="fa-solid fa-user-tie"></i></a></button><br>
             <?php } ?>
 
             <button>

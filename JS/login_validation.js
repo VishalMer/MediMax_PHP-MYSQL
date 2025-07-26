@@ -1,27 +1,23 @@
 document.getElementById('loginForm')
   .addEventListener('submit', function (event) {
-    // Prevent form submission
+    // Prevent form submission initially to allow for JavaScript validation
     event.preventDefault();
 
     // Reset previous error messages
-    document.getElementById('emailError').textContent = '';
+    document.getElementById('identifierError').textContent = '';
     document.getElementById('passwordError').textContent = '';
 
     // Get form values
-    var email = document.getElementById('email').value;
+    var identifier = document.getElementById('identifier').value;
     var password = document.getElementById('password').value;
 
     // Validation
     var isValid = true;
 
-    // Email Validation (remains the same as before)
-    if (email.trim() === '') {
-      document.getElementById('emailError').textContent =
-        'Email is required';
-      isValid = false;
-    } else if (!validateEmail(email)) {
-      document.getElementById('emailError').textContent =
-        'Invalid email address';
+    // Identifier Validation
+    if (identifier.trim() === '') {
+      document.getElementById('identifierError').textContent =
+        'Username or Email is required';
       isValid = false;
     }
 
@@ -42,18 +38,12 @@ document.getElementById('loginForm')
       document.getElementById('passwordError').textContent = 'Password must contain at least one number.';
       isValid = false;
     } else if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/.test(password)) { // Requires at least one special character
-      document.getElementById('passwordError').textContent = 'Needs special char.';
+      document.getElementById('passwordError').textContent = 'Needs special character.';
       isValid = false;
     }
 
-    // If all validations pass, submit the form
+    // If all validations pass, submit the form programmatically
     if (isValid) {
-      this.submit();
+      this.submit(); // This line ensures the form is submitted
     }
   });
-
-// Email validation function (No change here)
-function validateEmail(email) {
-  var re = /\S+@\S+\.\S+/;
-  return re.test(email);
-}

@@ -25,11 +25,12 @@ if (isset($_SESSION['message']) && !empty($_SESSION['message'])) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $email = mysqli_real_escape_string($conn, $_POST["email"]);
-
+    // Corrected the typo from 'identifiler' to 'identifier'
+    $identifier = mysqli_real_escape_string($conn, $_POST["identifier"]);
+    
     $password = md5($_POST["password"]); // Use md5 as per your existing code, but consider stronger hashing like password_hash in production
 
-    $select_query = "SELECT id, name, role FROM `users` WHERE email = '$email' AND password = '$password'";
+    $select_query = "SELECT id, name, role FROM `users` WHERE (email = '$identifier' OR name = '$identifier') AND password = '$password'";
     $select_result = mysqli_query($conn, $select_query);
 
     if (!$select_result) {
@@ -39,16 +40,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $_SESSION["user_id"] = $row['id'];
         $_SESSION['user_name'] = $row['name'];
-        $_SESSION['user_role'] = $row['role']; // Corrected 'roll' to 'role' based on common table structure
+        $_SESSION['user_role'] = $row['role']; 
 
         if ($row['role'] == 'admin' || $row['role'] == 'owner') {
-            header("Location: /medimax/PHP/AdminPanel.php"); // Corrected path
+            header("Location: /medimax/PHP/admin/adminPanel.php"); 
         } else {
-            header("Location: /medimax/index.php"); // Corrected path
+            header("Location: /medimax/index.php");
         }
         exit();
     } else {
-        $display_message[] = 'Incorrect email or password!';
+        // Changed the error message to "Wrong credentials!"
+        $display_message[] = 'Wrong credentials!'; 
     }
 }
 
@@ -78,10 +80,10 @@ $conn->close();
         <h2 class="login">Login</h2>
         <form method="post" id="loginForm" action="login_form.php">
             <div class="form-group">
-                <input type="text" id="email" name="email" value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>">
-                <label for="email">Email</label><br>
+                <input type="text" id="identifier" name="identifier" value="<?php echo isset($_POST['identifier']) ? htmlspecialchars($_POST['identifier']) : ''; ?>">
+                <label for="identifier">Username or Email</label><br>
             </div>
-            <p id="emailError" class="error"></p>
+            <p id="identifierError" class="error"></p>
 
             <div class="form-group">
                 <input type="password" id="password" name="password">

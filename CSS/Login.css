@@ -74,7 +74,7 @@ input:valid ~ label{
     top: -5px;
 }
 
-#usernameError,#emailError, #oldPassError, #newPassError{
+#usernameError,#identifierError, #oldPassError, #newPassError{
     margin: -35px 0px 20px 0px ;
 }
 
