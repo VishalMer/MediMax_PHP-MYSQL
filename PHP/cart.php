@@ -9,13 +9,8 @@ header("Pragma: no-cache");
 header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // A date in the past (effective for preventing caching)
 // --- END: Crucial Cache Control Headers ---
 
-// Include your database connection FIRST
-include 'connection.php'; // connection.php is in the same directory (PHP/)
-
-// Include the centralized user session and details logic.
-// This file handles session_start(), fetching user details ($user_id, $username, etc.),
-// and processing the `logout` GET parameter. It also initializes and manages the $message array.
-include 'user_session.php'; // user_session.php is also in the same directory (PHP/)
+include 'connection.php'; 
+include 'user_session.php'; 
 
 // --- Enforce Login for Cart Page ---
 // If the user is not logged in ($user_id will be null as set by user_session.php),
@@ -177,16 +172,19 @@ if (isset($_POST['search'])) {
     </header>
         
     <div class="pr-options hide">
-        <button><a href="Update Profile.php">Update User Profile <i class="fa-solid fa-address-card" style="color: #ffffff;"></i></a></button><br>
-        <button><a href="Update Password.php">Change Password <i class="fa-solid fa-key" style="color: #ffffff;"></i></a></button><br>
+        <a href="Update Profile.php"><button>Update User Profile <i class="fa-solid fa-address-card" style="color: #ffffff;"></i></button></a><br>
+        <a href="Update Password.php"><button>Change Password <i class="fa-solid fa-key" style="color: #ffffff;"></i></button></a><br>
         
         <?php if ($user_role === 'admin' || $user_role === 'owner') { ?>
-            <button><a href="AdminPanel.php" target="_blank">Admin Panel <i class="fa-solid fa-user-tie"></i></a></button><br>
+        <a href="AdminPanel.php" target="_blank"><button>Admin Panel <i class="fa-solid fa-user-tie"></i></button></a><br>
         <?php } ?>
 
-        <button>
-            <a href="../index.php?logout=true"  onclick="return confirm('Are you sure you want to log out ??');">Log Out <i class="fa-solid fa-right-from-bracket" style="color: #ffffff;"></i></a>
-        </button>
+        <a href="contact.php"><button>Support <i class="fa-solid fa-headset" style="color: #ffffff;"></i></button></a><br>
+        
+        <a href="../index.php?logout=true"  onclick="return confirm('Are you sure you want to log out ??');">
+            <button>Log Out <i class="fa-solid fa-right-from-bracket" style="color: #ffffff;"></button></i>
+        </a>
+        
     </div>
 
     <main class="cart">

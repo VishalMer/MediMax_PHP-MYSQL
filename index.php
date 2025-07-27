@@ -73,16 +73,19 @@ if (isset($_POST['search'])) {
     </header>
     
     <?php if ($user_id !== null): ?> <div class="pr-options hide">
-            <button><a href="PHP/Update Profile.php">Update User Profile <i class="fa-solid fa-address-card" style="color: #ffffff;"></i></a></button><br>
-            <button><a href="PHP/Update Password.php">Change Password <i class="fa-solid fa-key" style="color: #ffffff;"></i></a></button><br>
+            <a href="PHP/Update Profile.php"><button>Update User Profile <i class="fa-solid fa-address-card" style="color: #ffffff;"></i></button></a><br>
+            <a href="PHP/Update Password.php"><button>Change Password <i class="fa-solid fa-key" style="color: #ffffff;"></i></button></a><br>
 
             <?php if ($user_role === 'admin' || $user_role === 'owner') { ?>
-                <button><a href="PHP/admin/adminPanel.php" target="_blank">Admin Panel <i class="fa-solid fa-user-tie"></i></a></button><br>
+                <a href="PHP/admin/adminPanel.php" target="_blank"><button>Admin Panel <i class="fa-solid fa-user-tie"></i></button></a><br>
             <?php } ?>
 
-            <button>
-                <a href="?logout=true"  onclick="return confirm('Are you sure you want to log out?');">Log Out <i class="fa-solid fa-right-from-bracket" style="color: #ffffff;"></i></a>
-            </button>
+            <a href="PHP/contact.php"><button>Support <i class="fa-solid fa-headset" style="color: #ffffff;"></i></button></a><br>
+            
+            <a href="?logout=true"  onclick="return confirm('Are you sure you want to log out?');">
+                <button>Log Out <i class="fa-solid fa-right-from-bracket" style="color: #ffffff;"></i></button>
+            </a>
+            
         </div>
     <?php endif; ?>
 

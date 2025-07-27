@@ -91,7 +91,7 @@ $conn->close();
             </div>
             <p id="passwordError" class="error"></p>
 
-            <p id="forgetPass"><a href="forget_password.php">Forgot Password?</a></p>
+            <p id="forgetPass"><a href="#">Forgot Password?</a></p>
             <input type="submit" value="Login" name="login" id="submitbtn">
 
             <p>Don't have an account?
