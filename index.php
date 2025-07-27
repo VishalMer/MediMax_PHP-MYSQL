@@ -138,7 +138,7 @@ if (isset($_POST['search'])) {
                 $search_sql = mysqli_real_escape_string($conn, $search_query);
                 $select_product = mysqli_query($conn, "SELECT * FROM `products` WHERE name LIKE '%$search_sql%'") or die('Query failed: ' . mysqli_error($conn));
             } else {
-                $select_product = mysqli_query($conn, "SELECT * FROM `products` LIMIT 5") or die('Query failed: ' . mysqli_error($conn));
+                $select_product = mysqli_query($conn, "SELECT * FROM `products` ORDER BY RAND() LIMIT 5") or die('Query failed: ' . mysqli_error($conn));
             }
 
             if (mysqli_num_rows($select_product) > 0) {
