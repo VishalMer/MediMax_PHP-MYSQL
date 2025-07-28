@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['user_role'] = $row['role']; 
 
         if ($row['role'] == 'admin' || $row['role'] == 'owner') {
-            header("Location: /medimax/PHP/admin/adminPanel.php"); 
+            header("Location: /medimax/PHP/admin/admin_panel.php"); 
         } else {
             header("Location: /medimax/index.php");
         }

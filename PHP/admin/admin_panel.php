@@ -74,7 +74,7 @@ if ($stmt_turnover) {
         /* Your existing styles here, or in adminPanel.css */
     </style>
 </head>
-<body style="backdrop-filter: blur(3px);">
+    <body style="background-image: url('../../Images/MediMax-BG.jpeg');">
     
     <div class="header">
         <a href="admin_panel.php" > <div class="user-info">
