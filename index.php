@@ -74,10 +74,10 @@ if (isset($_POST['search'])) {
     
     <?php if ($user_id !== null): ?> <div class="pr-options hide">
             <a href="PHP/Update Profile.php"><button>Update User Profile <i class="fa-solid fa-address-card" style="color: #ffffff;"></i></button></a><br>
-            <a href="PHP/Update Password.php"><button>Change Password <i class="fa-solid fa-key" style="color: #ffffff;"></i></button></a><br>
+            <a href="PHP/admin/update_password.php"><button>Change Password <i class="fa-solid fa-key" style="color: #ffffff;"></i></button></a><br>
 
             <?php if ($user_role === 'admin' || $user_role === 'owner') { ?>
-                <a href="PHP/admin/adminPanel.php" target="_blank"><button>Admin Panel <i class="fa-solid fa-user-tie"></i></button></a><br>
+                <a href="PHP/admin/admin_panel.php" target="_blank"><button>Admin Panel <i class="fa-solid fa-user-tie"></i></button></a><br>
             <?php } ?>
 
             <a href="PHP/contact.php"><button>Support <i class="fa-solid fa-headset" style="color: #ffffff;"></i></button></a><br>
