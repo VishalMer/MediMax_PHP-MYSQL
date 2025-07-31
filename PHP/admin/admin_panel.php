@@ -1,28 +1,22 @@
 <?php
 include '../connection.php';
-include 'admin_details.php'; // This file now sets $loggedInUserRole, $username, $firstLetter, $image, $user_id
+include 'admin_details.php'; 
 
-// Log out logic
-// Ensure session_start() is called once in admin_details.php or connection.php
 if (isset($_GET['logout'])) {
     // Unset all of the session variables
     $_SESSION = array();
-
-    // Destroy the session
     session_destroy();
 
-    // Redirect to login form
-    header('Location: ../LoginForm.php'); // Corrected path to LoginForm.php
+    header('Location: ../LoginForm.php'); 
     exit();
 }
 
-// Initialize variables to 0 or appropriate defaults in case queries fail
+//variable initialization
 $orderCount = 0;
 $customerCount = 0;
 $totalTurnover = 0;
 
-// Fetch dashboard statistics using prepared statements for security
-// --- Total Orders ---
+// Total Orders
 $stmt_orders = $conn->prepare("SELECT COUNT(*) FROM `orders` WHERE `quantity` > 0");
 if ($stmt_orders) {
     $stmt_orders->execute();
@@ -30,11 +24,10 @@ if ($stmt_orders) {
     $stmt_orders->fetch();
     $stmt_orders->close();
 } else {
-    // Log error or handle gracefully
     error_log("Failed to prepare orderCount statement: " . $conn->error);
 }
 
-// --- Total Customers ---
+// Total Customers
 $stmt_customers = $conn->prepare("SELECT COUNT(*) FROM `users`");
 if ($stmt_customers) {
     $stmt_customers->execute();
@@ -42,24 +35,21 @@ if ($stmt_customers) {
     $stmt_customers->fetch();
     $stmt_customers->close();
 } else {
-    // Log error or handle gracefully
     error_log("Failed to prepare customerCount statement: " . $conn->error);
 }
 
-// --- Total Turnover ---
+// Total Turnover
 $stmt_turnover = $conn->prepare("SELECT SUM(price * quantity) AS total FROM `orders` WHERE payment = 'Completed'"); // Only sum completed payments
 if ($stmt_turnover) {
     $stmt_turnover->execute();
     $stmt_turnover->bind_result($totalTurnover_raw);
     $stmt_turnover->fetch();
     $stmt_turnover->close();
-    $totalTurnover = $totalTurnover_raw ? $totalTurnover_raw : 0; // Ensure it's zero if NULL
+    $totalTurnover = $totalTurnover_raw ? $totalTurnover_raw : 0; 
 } else {
-    // Log error or handle gracefully
     error_log("Failed to prepare totalTurnover statement: " . $conn->error);
 }
 
-// No $message array in this file, so no message display block needed
 ?>
 
 <!DOCTYPE html>
@@ -70,9 +60,6 @@ if ($stmt_turnover) {
     <link rel="stylesheet" href="../../CSS/adminPanel.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Admin Panel - MediMax.com</title>
-    <style>
-        /* Your existing styles here, or in adminPanel.css */
-    </style>
 </head>
     <body style="background-image: url('../../Images/MediMax-BG.jpeg');">
     

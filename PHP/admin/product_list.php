@@ -1,21 +1,19 @@
 <?php
 
 include '../connection.php';
-include 'admin_details.php'; // This file now sets $loggedInUserRole, $username, $firstLetter, $image, $user_id
+include 'admin_details.php'; 
 
-// Initialize $message array for notifications
 $message = [];
 
-// Delete item from products
+// Delete item products
 if(isset($_GET['delete'])){
     $delete_id = $_GET['delete'];
     
-    // Using prepared statement for delete for security
     $delete_stmt = $conn->prepare("DELETE FROM `products` WHERE id = ?");
     if ($delete_stmt === false) {
         $message[] = "Error preparing delete statement: " . $conn->error;
     } else {
-        $delete_stmt->bind_param("i", $delete_id); // 'i' indicates integer type for $delete_id
+        $delete_stmt->bind_param("i", $delete_id); // 'i' means integer type for $delete_id
         if ($delete_stmt->execute()) {
             $message[] = 'Product deleted successfully!';
         } else {
@@ -84,7 +82,7 @@ if(isset($_GET['delete'])){
                 </tr>
 
                 <?php
-                // Fetch products from the products table using prepared statement for consistency
+                // Fetch products from the products table
                 $select_product_stmt = $conn->prepare("SELECT id, name, price, image FROM `products`");
                 
                 if ($select_product_stmt === false) {
