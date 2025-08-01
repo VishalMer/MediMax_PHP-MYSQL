@@ -143,7 +143,6 @@ if (isset($_POST['search'])) {
 
             if (mysqli_num_rows($select_product) > 0) {
                 while ($fetch_product = mysqli_fetch_assoc($select_product)) {
-                    // Initialize
                     $is_in_wishlist = false;
                     // check wishlist if user is logged in
                     if ($user_id !== null) {

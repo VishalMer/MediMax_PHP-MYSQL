@@ -1,27 +1,19 @@
 <?php
-// PHP/AboutUs.php
 
-// --- START: Crucial Cache Control Headers for AboutUs.php ---
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
-// --- END: Crucial Cache Control Headers ---
 
-// Include your database connection FIRST
-include 'connection.php'; // connection.php is in the same directory (PHP/)
+include 'connection.php'; 
+include 'user_session.php'; 
 
-// Include the centralized user session and details logic.
-// This file handles session_start(), fetching user details ($user_id, $username, etc.),
-// and processing the `logout` GET parameter.
-include 'user_session.php'; // user_session.php is also in the same directory (PHP/)
-
-// --- Search bar logic for header (if it redirects to products.php) ---
+// --- Search bar logic
 if (isset($_POST['search'])) {
     $search_input = htmlspecialchars($_POST['search_input']);
-    // Redirect to products.php with the search query
+    
     header('Location: products.php?search=' . urlencode($search_input));
-    exit(); // Always exit after a header redirect
+    exit(); 
 }
 
 ?>
@@ -60,7 +52,7 @@ if (isset($_POST['search'])) {
         </nav>
 
         <div class="profile">
-            <?php if ($user_id !== null): // Check if user is logged in ?>
+            <?php if ($user_id !== null): ?>
                 <a href="Wishlist.php"><button><i class="fa-solid fa-heart" style="color: #ff0000;"></i></button></a>
                 <a href="Cart.php"><button><i class="fa-solid fa-cart-plus"></i></button></a>
                 <button id="options">
@@ -100,12 +92,12 @@ if (isset($_POST['search'])) {
     <?php endif; ?>
 
     <?php
-    // The $message variable is now managed by user_session.php via $_SESSION['message']
+
     if (!empty($_SESSION['message'])) {
         foreach ($_SESSION['message'] as $msg) {
             echo '<div class="cart-msg message" onclick="this.remove();">' . htmlspecialchars($msg) . '</div>';
         }
-        unset($_SESSION['message']); // Clear messages after displaying them
+        unset($_SESSION['message']); 
     }
     ?>
 

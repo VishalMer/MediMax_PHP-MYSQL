@@ -1,34 +1,27 @@
 <?php
-// PHP/login_form.php
 
 include 'connection.php';
 
-session_start(); // Ensure session is started at the very beginning
+session_start(); 
 
-// Initialize a variable to hold the message to be displayed on this page
 $display_message = [];
 
-// Check for a specific login message from session (set by products_buttons.php)
 if (isset($_SESSION['login_message']) && !empty($_SESSION['login_message'])) {
     $display_message[] = $_SESSION['login_message'];
-    unset($_SESSION['login_message']); // Clear the message after displaying
-}
+    unset($_SESSION['login_message']); }
 
-// Check for general messages from session (e.g., from a previous login attempt)
-// This is your existing $_SESSION['message'] array for other types of messages
 if (isset($_SESSION['message']) && !empty($_SESSION['message'])) {
-    // Merge existing messages into $display_message
+    
     $display_message = array_merge($display_message, $_SESSION['message']);
-    unset($_SESSION['message']); // Clear general messages after displaying
+    unset($_SESSION['message']); 
 }
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    // Corrected the typo from 'identifiler' to 'identifier'
     $identifier = mysqli_real_escape_string($conn, $_POST["identifier"]);
     
-    $password = md5($_POST["password"]); // Use md5 as per your existing code, but consider stronger hashing like password_hash in production
+    $password = md5($_POST["password"]); 
 
     $select_query = "SELECT id, name, role FROM `users` WHERE (email = '$identifier' OR name = '$identifier') AND password = '$password'";
     $select_result = mysqli_query($conn, $select_query);
@@ -49,7 +42,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         exit();
     } else {
-        // Changed the error message to "Wrong credentials!"
         $display_message[] = 'Wrong credentials!'; 
     }
 }

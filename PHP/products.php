@@ -101,7 +101,7 @@ if (isset($_SESSION['message']) && !empty($_SESSION['message'])) {
 
 <div class="shopping">
     <?php
-        // Fetch current cart and wishlist items for the logged-in user to properly set button states
+    
         $user_cart_items = [];
         $user_wishlist_items = [];
         if ($user_id !== null) {

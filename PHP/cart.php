@@ -1,41 +1,30 @@
 <?php
-// PHP/Cart.php
 
-// --- START: Crucial Cache Control Headers for Cart.php ---
-// These headers tell the browser NOT to cache this page.
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
-header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // A date in the past (effective for preventing caching)
-// --- END: Crucial Cache Control Headers ---
+header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); 
 
 include 'connection.php'; 
 include 'user_session.php'; 
 
-// --- Enforce Login for Cart Page ---
-// If the user is not logged in ($user_id will be null as set by user_session.php),
-// redirect them to the login page with a message.
 if ($user_id === null) {
-    // We can use $_SESSION['message'] directly as user_session.php will initialize it.
+
     $_SESSION['message'][] = 'Please login to view your cart.';
-    // Redirect to login form (relative to current directory, which is PHP/)
     header('Location: login_form.php');
     exit();
 }
-
-// All subsequent operations will now safely use $user_id, $conn, and $message
-// as they are established by the included files above.
 
 // Update cart information
 if (isset($_POST['update_cart'])) {
     $update_quantity = mysqli_real_escape_string($conn, $_POST['cart_quantity']);
     $update_id = mysqli_real_escape_string($conn, $_POST['cart_id']);
-    // Ensure quantity is a positive integer
+
     if (!is_numeric($update_quantity) || $update_quantity <= 0) {
         $_SESSION['message'][] = 'Invalid quantity provided!';
     } else {
         mysqli_query($conn, "UPDATE `cart` SET quantity = '$update_quantity' WHERE id = '$update_id' AND user_id = '$user_id'") or die('Query failed: ' . mysqli_error($conn));
-        $_SESSION['message'][] = 'Cart quantity updated!'; // Use $_SESSION['message']
+        $_SESSION['message'][] = 'Cart quantity updated!'; 
     }
 }
 
@@ -43,8 +32,8 @@ if (isset($_POST['update_cart'])) {
 elseif (isset($_GET['remove'])) {
     $remove_id = mysqli_real_escape_string($conn, $_GET['remove']);
     mysqli_query($conn, "DELETE FROM `cart` WHERE id = '$remove_id' AND user_id = '$user_id'") or die('Query failed: ' . mysqli_error($conn));
-    $_SESSION['message'][] = 'Cart item deleted!'; // Use $_SESSION['message']
-    // Redirect to self to remove GET parameter and prevent re-deletion on refresh
+    $_SESSION['message'][] = 'Cart item deleted!'; 
+
     header('Location: cart.php');
     exit();
 }
@@ -52,50 +41,44 @@ elseif (isset($_GET['remove'])) {
 // Delete all items from cart
 elseif (isset($_GET['delete_all'])) {
     mysqli_query($conn, "DELETE FROM `cart` WHERE user_id = '$user_id'") or die('Query failed: ' . mysqli_error($conn));
-    $_SESSION['message'][] = 'All items deleted from cart!'; // Use $_SESSION['message']
-    // Redirect to self to remove GET parameter and prevent re-deletion on refresh
+    $_SESSION['message'][] = 'All items deleted from cart!'; 
+
     header('Location: cart.php');
     exit();
 }
 
-// Buy All Now - New Functionality
+// Buy All Now - Functionality
 if (isset($_POST['buy_all'])) {
     // Fetch all products from the cart
     $cart_query = mysqli_query($conn, "SELECT * FROM `cart` WHERE user_id = '$user_id'") or die('Query failed: ' . mysqli_error($conn));
     
     if (mysqli_num_rows($cart_query) > 0) {
-        // Start a transaction for atomicity
         mysqli_begin_transaction($conn);
         $success = true;
 
-        // Loop through each product in the cart and insert into orders table
         while ($fetch_cart = mysqli_fetch_assoc($cart_query)) {
             $name = mysqli_real_escape_string($conn, $fetch_cart['name']);
             $price = mysqli_real_escape_string($conn, $fetch_cart['price']);
             $image = mysqli_real_escape_string($conn, $fetch_cart['image']);
-            $quantity = mysqli_real_escape_string($conn, $fetch_cart['quantity']);
-            
-            // Get current timestamp for 'placed_on'
-            $placed_on = date('Y-m-d H:i:s'); // Format for DATETIME column in SQL
+            $quantity = mysqli_real_escape_string($conn, $fetch_cart['quantity']);            
+            $placed_on = date('Y-m-d H:i:s'); 
 
-            // THIS IS THE LINE THAT WILL WORK AFTER YOU ADD 'placed_on' TO THE 'orders' TABLE
             $insert_order = mysqli_query($conn, "INSERT INTO `orders` (user_id, name, price, image, quantity, placed_on) VALUES ('$user_id', '$name', '$price', '$image', '$quantity', '$placed_on')");
             
             if (!$insert_order) {
                 $success = false;
-                // Add specific error message for debugging
                 $_SESSION['message'][] = 'Failed to place order for ' . htmlspecialchars($name) . ': ' . mysqli_error($conn);
-                break; // Exit loop on first failure
+                break; 
             }
         }
 
         if ($success) {
-            // Clear the cart if all orders were successfully inserted
+            // Clear the cart after buy all
             $clear_cart = mysqli_query($conn, "DELETE FROM `cart` WHERE user_id = '$user_id'");
             if ($clear_cart) {
-                mysqli_commit($conn); // Commit transaction
+                mysqli_commit($conn); 
                 $_SESSION['message'][] = 'All products purchased successfully! Check your orders.';
-                header('Location: orders.php'); // Redirect to orders page after successful purchase
+                header('Location: orders.php'); 
                 exit();
             } else {
                 mysqli_rollback($conn); // Rollback if clearing cart fails
@@ -111,14 +94,11 @@ if (isset($_POST['buy_all'])) {
     }
 }
 
-
-// --- Search bar logic for header (if it redirects to products.php) ---
-// This part remains specific to this page's header functionality
 if (isset($_POST['search'])) {
     $search_input = htmlspecialchars($_POST['search_input']);
-    // Redirect to products.php with the search query
+
     header('Location: products.php?search=' . urlencode($search_input));
-    exit(); // Always exit after a header redirect
+    exit(); 
 }
 
 ?>

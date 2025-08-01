@@ -1,50 +1,33 @@
 <?php
-// PHP/orders.php
 
-// --- START: Crucial Cache Control Headers for Orders.php ---
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
-header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // A date in the past
-// --- END: Crucial Cache Control Headers ---
+header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); 
 
-// Include your database connection FIRST
-include 'connection.php'; // Assuming 'config.php' is now 'connection.php'
+include 'connection.php'; 
+include 'user_session.php'; 
 
-// Include the centralized user session and details logic.
-// This file handles session_start(), fetching user details ($user_id, $username, etc.),
-// and processing the `logout` GET parameter. It also initializes and manages the $message array.
-include 'user_session.php'; // user_session.php is in the same directory (PHP/)
-
-// --- Enforce Login for Orders Page ---
-// If the user is not logged in ($user_id will be null as set by user_session.php),
-// redirect them to the login page with a message.
 if ($user_id === null) {
-    // Optionally set a message for login page, handled by user_session.php and login_form.php
+
     $_SESSION['message'][] = 'Please login to view your orders.';
-    header('Location: login_form.php'); // Redirect to login form (relative to current directory)
+    header('Location: login_form.php'); 
     exit();
 }
 
-// All subsequent operations will now safely use $user_id and $conn
-
-// Fetch all orders for the logged-in user
-// Ensure $user_id is properly escaped for the query
 $escaped_user_id = mysqli_real_escape_string($conn, $user_id);
 $orders_query = mysqli_query($conn, "SELECT * FROM `orders` WHERE user_id = '$escaped_user_id'") or die('Query failed: ' . mysqli_error($conn));
 
 $total_products = mysqli_num_rows($orders_query);
 $total_amount = 0;
-$paid_amount = 0;    // Initialize paid amount variable
-$remaining_amount = 0; // Initialize remaining amount variable
+$paid_amount = 0;    
+$remaining_amount = 0; 
 
-// --- Search bar logic for header (if it redirects to products.php) ---
-// This part remains specific to this page's header functionality
 if (isset($_POST['search'])) {
     $search_input = htmlspecialchars($_POST['search_input']);
-    // Redirect to products.php with the search query
+    
     header('Location: products.php?search=' . urlencode($search_input));
-    exit(); // Always exit after a header redirect
+    exit(); 
 }
 
 ?>
@@ -119,11 +102,10 @@ if (isset($_POST['search'])) {
                 <?php
                 // Check if there are any orders and display them
                 if($total_products > 0) {
-                    // Reset query pointer to loop through results again if needed, though not strictly required here.
-                    // mysqli_data_seek($orders_query, 0); 
+                    
                     while ($order = mysqli_fetch_assoc($orders_query)) {
                         $sub_total = $order['price'] * $order['quantity'];
-                        $total_amount += $sub_total;  // Add to total amount
+                        $total_amount += $sub_total; 
 
                         // Add to paid amount if payment is completed
                         if ($order['payment'] === 'Completed') {
@@ -142,7 +124,7 @@ if (isset($_POST['search'])) {
                         <?php
                     }
                 } else {
-                    echo "<tr><td colspan='8' class='no-orders-found'><h1>No orders found</h1></td></tr>"; // Added class for styling
+                    echo "<tr><td colspan='8' class='no-orders-found'><h1>No orders found</h1></td></tr>"; 
                 }
 
                 // Calculate remaining amount

@@ -1,40 +1,25 @@
 <?php
-// PHP/Contact.php
 
-// --- START: Crucial Cache Control Headers for Contact.php ---
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
-header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // A date in the past (effective for preventing caching)
-// --- END: Crucial Cache Control Headers ---
+header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
 
-// Include your database connection FIRST
-include 'connection.php'; // connection.php is in the same directory (PHP/)
+include 'connection.php'; 
+include 'user_session.php';
 
-// Include the centralized user session and details logic.
-// This file handles session_start(), fetching user details ($user_id, $username, etc.),
-// and processing the `logout` GET parameter. It also initializes and manages the $message array.
-include 'user_session.php'; // user_session.php is also in the same directory (PHP/)
-
-// --- Enforce Login for Contact Page ---
-// If the user is not logged in ($user_id will be null as set by user_session.php),
-// redirect them to the login page with a message.
 if ($user_id === null) {
-    // Set a message for the login page
+    
     $_SESSION['message'][] = 'Please login to contact us.';
-    header('Location: login_form.php'); // Redirect to login form
-    exit(); // Stop script execution after redirect
+    header('Location: login_form.php'); 
+    exit(); 
 }
 
-// All subsequent operations will now safely use $user_id, $username, $user_email, etc.
-
-// --- Search bar logic for header (if it redirects to products.php) ---
-// This part remains specific to this page's header functionality
 if (isset($_POST['search'])) {
     $search_input = htmlspecialchars($_POST['search_input']);
-    // Redirect to products.php with the search query
+    
     header('Location: products.php?search=' . urlencode($search_input));
-    exit(); // Always exit after a header redirect
+    exit(); 
 }
 
 ?>
@@ -47,9 +32,7 @@ if (isset($_POST['search'])) {
     <link rel="stylesheet" href="../CSS/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Contact - MediMax.com</title>
-    <style>
-        /* Your existing inline styles can go here if needed */
-    </style>
+    
 </head>
 <body>
     <header class="header">
@@ -73,7 +56,7 @@ if (isset($_POST['search'])) {
         </nav>
 
         <div class="profile">
-            <?php if ($user_id !== null): // Check if user is logged in ?>
+            <?php if ($user_id !== null):  ?>
                 <a href="Wishlist.php"><button><i class="fa-solid fa-heart" style="color: #ff0000;"></i></button></a>
                 <a href="Cart.php"><button><i class="fa-solid fa-cart-plus"></i></button></a>
                 <button id="options">
@@ -86,7 +69,7 @@ if (isset($_POST['search'])) {
                     </div>
                     <div id="userName"><?php echo htmlspecialchars($username); ?></div>
                 </button>
-            <?php else: // User is not logged in, show Login/Register button ?>
+            <?php else: ?>
                 <button>
                 <a href="login_form.php">Login/Register <i class="fa-solid fa-user-plus"></i></a>
                 </button>
@@ -113,12 +96,12 @@ if (isset($_POST['search'])) {
     <?php endif; ?>
 
     <?php
-    // The $message variable is now managed by user_session.php via $_SESSION['message']
+
     if (!empty($_SESSION['message'])) {
         foreach ($_SESSION['message'] as $msg) {
             echo '<div class="cart-msg message" onclick="this.remove();">' . htmlspecialchars($msg) . '</div>';
         }
-        unset($_SESSION['message']); // Clear messages after displaying them
+        unset($_SESSION['message']); 
     }
     ?>
 

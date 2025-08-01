@@ -1,36 +1,24 @@
 <?php
-// PHP/wishlist.php
 
-// --- START: Crucial Cache Control Headers for Wishlist.php ---
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
-header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // A date in the past
-// --- END: Crucial Cache Control Headers ---
+header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); 
 
-// Include your database connection FIRST
 include 'connection.php'; 
-
-// Include the centralized user session and details logic.
-// This file handles session_start(), fetching user details ($user_id, $username, etc.),
-// and processing the `logout` GET parameter. It also initializes and manages the $_SESSION['message'] array.
 include 'user_session.php'; 
 
-// --- CRITICAL: If the user is not logged in redirect them to the login page with a message. ---
 if ($user_id === null) {
     $_SESSION['message'][] = 'Please login to view your wishlist.';
     header('Location: login_form.php'); 
-    exit(); // <<<--- This is the vital addition
+    exit(); 
 }
 
-// All subsequent operations will now safely use $user_id, $conn, and $_SESSION['message']
-
-// Delete item from wishlist
 if (isset($_GET['remove'])) {
     $remove_id = mysqli_real_escape_string($conn, $_GET['remove']);
     mysqli_query($conn, "DELETE FROM `wishlist` WHERE id = '$remove_id' AND user_id = '$user_id'") or die('Query failed: ' . mysqli_error($conn));
-    $_SESSION['message'][] = 'Wishlist item deleted!'; // Use $_SESSION['message']
-    // Redirect to self to remove GET parameter and prevent re-deletion on refresh
+    $_SESSION['message'][] = 'Wishlist item deleted!'; 
+
     header('Location: wishlist.php');
     exit();
 }
@@ -38,19 +26,16 @@ if (isset($_GET['remove'])) {
 // Delete all items from wishlist
 elseif (isset($_GET['delete_all'])) {
     mysqli_query($conn, "DELETE FROM `wishlist` WHERE user_id = '$user_id'") or die('Query failed: ' . mysqli_error($conn));
-    $_SESSION['message'][] = 'All items deleted from wishlist!'; // Use $_SESSION['message']
-    // Redirect to self to remove GET parameter and prevent re-deletion on refresh
+    $_SESSION['message'][] = 'All items deleted from wishlist!'; 
     header('Location: wishlist.php');
     exit();
 }
 
-// --- Search bar logic for header (if it redirects to products.php) ---
-// This part remains specific to this page's header functionality
+
 if (isset($_POST['search'])) {
     $search_input = htmlspecialchars($_POST['search_input']);
-    // Redirect to products.php with the search query
     header('Location: products.php?search=' . urlencode($search_input));
-    exit(); // Always exit after a header redirect
+    exit(); 
 }
 
 ?>
@@ -179,7 +164,6 @@ if (isset($_POST['search'])) {
                     <div class="cart-footer">
                         <button><a href="Products.php">Wishlist More Products...</a></button>
                         <?php
-                            // Re-run the query to get the latest count after potential deletions
                             $current_wishlist_count = mysqli_query($conn, "SELECT COUNT(*) FROM `wishlist` WHERE user_id = '$user_id'") or die("query failed: " . mysqli_error($conn));
                             $row_count = mysqli_fetch_row($current_wishlist_count);
                             $is_wishlist_empty = ($row_count[0] == 0);
