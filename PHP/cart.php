@@ -77,7 +77,7 @@ if (isset($_POST['buy_all'])) {
             $clear_cart = mysqli_query($conn, "DELETE FROM `cart` WHERE user_id = '$user_id'");
             if ($clear_cart) {
                 mysqli_commit($conn); 
-                $_SESSION['message'][] = 'All products purchased successfully! Check your orders.';
+                $_SESSION['message'][] = 'All products purchased successfully!';
                 header('Location: orders.php'); 
                 exit();
             } else {
