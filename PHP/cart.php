@@ -152,98 +152,98 @@ if (isset($_POST['search'])) {
     </header>
         
     <div class="pr-options hide">
-        <a href="Update Profile.php"><button>Update User Profile <i class="fa-solid fa-address-card" style="color: #ffffff;"></i></button></a><br>
-        <a href="Update Password.php"><button>Change Password <i class="fa-solid fa-key" style="color: #ffffff;"></i></button></a><br>
-        
+        <a href="admin/update_profile.php"><button>Update User Profile <i class="fa-solid fa-address-card" style="color: #ffffff;"></i></button></a><br>
+        <a href="admin/update_password.php"><button>Change Password <i class="fa-solid fa-key" style="color: #ffffff;"></i></button></a><br>
+
         <?php if ($user_role === 'admin' || $user_role === 'owner') { ?>
-        <a href="AdminPanel.php" target="_blank"><button>Admin Panel <i class="fa-solid fa-user-tie"></i></button></a><br>
+            <a href="admin/admin_panel.php" target="_blank"><button>Admin Panel <i class="fa-solid fa-user-tie"></i></button></a><br>
         <?php } ?>
 
         <a href="contact.php"><button>Support <i class="fa-solid fa-headset" style="color: #ffffff;"></i></button></a><br>
-        
-        <a href="../index.php?logout=true"  onclick="return confirm('Are you sure you want to log out ??');">
-            <button>Log Out <i class="fa-solid fa-right-from-bracket" style="color: #ffffff;"></button></i>
+            
+        <a href="?logout=true"  onclick="return confirm('Are you sure you want to log out?');">
+            <button>Log Out <i class="fa-solid fa-right-from-bracket" style="color: #ffffff;"></i></button>
         </a>
-        
+            
     </div>
 
     <main class="cart">
 
-    <?php
-    if(!empty($_SESSION['message'])){ 
-        foreach($_SESSION['message'] as $msg){ 
-            echo '<div class="cart-msg message" onclick="this.remove();">'.htmlspecialchars($msg).'</div>'; 
-        }
-        unset($_SESSION['message']);
-    }
-    ?>
+        <?php
+            if(!empty($_SESSION['message'])){ 
+                foreach($_SESSION['message'] as $msg){ 
+                    echo '<div class="cart-msg message" onclick="this.remove();">'.htmlspecialchars($msg).'</div>'; 
+                }
+                unset($_SESSION['message']);
+            }
+        ?>
 
-    <table class="cart-container">
-                <tr class="cart-header">
-                    <th class="cart-title" colspan="4">Your Cart </th>
-                </tr>
-                <tr>
-                    <td class="cart-content">
-                        <div class="cart-boxes">
-                            <?php
-                                $grand_total = 0;
-                                $cart_query = mysqli_query($conn, "SELECT * FROM `cart` WHERE user_id = '$user_id'") or die("query failed: " . mysqli_error($conn));
-                                if (mysqli_num_rows($cart_query) > 0) {
-                                    while ($fetch_cart = mysqli_fetch_assoc($cart_query)) {
-                                        $sub_total = $fetch_cart['price'] * $fetch_cart['quantity'];
-                                        $grand_total += $sub_total;
-                                ?>
-                                <div class="cart-box">
-                                    <img src="../Images/<?php echo htmlspecialchars($fetch_cart['image']); ?>" alt="<?php echo htmlspecialchars($fetch_cart['name']); ?>"> 
-                                    <div class="product-detail">
-                                        <h2><?php echo htmlspecialchars($fetch_cart['name']); ?></h2><br>
-                                        <pre>Price :             Sub Total : <br><span><i class="fa-solid fa-indian-rupee-sign"></i><?php echo htmlspecialchars(number_format($fetch_cart['price'], 2)); ?>           <i class="fa-solid fa-indian-rupee-sign"></i><?php echo htmlspecialchars(number_format($sub_total, 2));?></span></pre><br>
+        <table class="cart-container">
+            <tr class="cart-header">
+                <th class="cart-title" colspan="4">Your Cart </th>
+            </tr>
+            <tr>
+                <td class="cart-content">
+                    <div class="cart-boxes">
+                        <?php
+                            $grand_total = 0;
+                            $cart_query = mysqli_query($conn, "SELECT * FROM `cart` WHERE user_id = '$user_id'") or die("query failed: " . mysqli_error($conn));
+                            if (mysqli_num_rows($cart_query) > 0) {
+                                while ($fetch_cart = mysqli_fetch_assoc($cart_query)) {
+                                    $sub_total = $fetch_cart['price'] * $fetch_cart['quantity'];
+                                    $grand_total += $sub_total;
+                        ?>
+                            <div class="cart-box">
+                                <img src="../Images/<?php echo htmlspecialchars($fetch_cart['image']); ?>" alt="<?php echo htmlspecialchars($fetch_cart['name']); ?>"> 
+                                <div class="product-detail">
+                                    <h2><?php echo htmlspecialchars($fetch_cart['name']); ?></h2><br>
+                                    <pre>Price :             Sub Total : <br><span><i class="fa-solid fa-indian-rupee-sign"></i><?php echo htmlspecialchars(number_format($fetch_cart['price'], 2)); ?>           <i class="fa-solid fa-indian-rupee-sign"></i><?php echo htmlspecialchars(number_format($sub_total, 2));?></span></pre><br>
 
-                                        <p>Quantity :</p>
-                                        <div class="cart-quantity">
-                                            <form method="post" action="cart.php"> 
-                                                <input type="hidden" name="cart_id" value="<?php echo htmlspecialchars($fetch_cart['id']); ?>">
-                                                <input type="number" min="1" max="99" name="cart_quantity" value="<?php echo htmlspecialchars($fetch_cart['quantity']); ?>" id="quantity">
-                                                <input type="submit" name="update_cart" value="Update" class="updatebtn">
-                                            </form>
-                                            <a href="Cart.php?remove=<?php echo htmlspecialchars($fetch_cart['id']); ?>"
-                                            onclick="return confirm('Remove item from cart?');"><i class="remove-item fa-regular fa-trash-can" style="color: #094e7e;"></i></a>
-                                        </div>
+                                    <p>Quantity :</p>
+                                    <div class="cart-quantity">
+                                        <form method="post" action="cart.php"> 
+                                            <input type="hidden" name="cart_id" value="<?php echo htmlspecialchars($fetch_cart['id']); ?>">
+                                            <input type="number" min="1" max="99" name="cart_quantity" value="<?php echo htmlspecialchars($fetch_cart['quantity']); ?>" id="quantity">
+                                            <input type="submit" name="update_cart" value="Update" class="updatebtn">
+                                        </form>
+                                        <a href="Cart.php?remove=<?php echo htmlspecialchars($fetch_cart['id']); ?>"
+                                        onclick="return confirm('Remove item from cart?');"><i class="remove-item fa-regular fa-trash-can" style="color: #094e7e;"></i></a>
                                     </div>
                                 </div>
-                                <?php
-                                    }
-                                } else {
-                                ?>
-                                    <div class="empty-cart">
-                                        <p>Your cart is empty</p>
-                                        <a href='products.php'><img src="../Images/Empty Cart.GIF" alt="Empty Cart"></a><br> 
-                                        <button><a href='products.php'>Continue Shopping</a></button>
-                                    </div>
-                                <?php
+                            </div>
+                        <?php
                                 }
-                                ?>
-                        </div>
-                    </td>
-                </tr>
+                            } else {
+                        ?>
+                                <div class="empty-cart">
+                                    <p>Your cart is empty</p>
+                                    <a href='products.php'><img src="../Images/Empty Cart.GIF" alt="Empty Cart"></a><br> 
+                                    <button><a href='products.php'>Continue Shopping</a></button>
+                                </div>
+                        <?php
+                         }
+                        ?>
+                    </div>
+                </td>
+            </tr>
             
-                <tr class="cart-bottom">
-                    <td class="cart-options">
-                        <div class="cart-footer">
-                            <button><a href="products.php">Continue Shopping...</a></button>
-                            <form method="post" action="cart.php"> 
-                                <button type="submit" name="buy_all" class="<?php echo ($grand_total > 0 && $user_id !== null) ? '' : 'disabled'; ?>">Buy All Now</button>
-                            </form>
-                            <button class="<?php echo ($grand_total > 0 && $user_id !== null) ? '' : 'disabled'; ?>">
-                                <a href="Cart.php?delete_all" onclick="return confirm('Are you sure you want to delete all cart items?')">Delete All</a>
-                            </button>
+            <tr class="cart-bottom">
+                <td class="cart-options">
+                    <div class="cart-footer">
+                        <button><a href="products.php">Continue Shopping...</a></button>
+                        <form method="post" action="cart.php"> 
+                            <button type="submit" name="buy_all" class="<?php echo ($grand_total > 0 && $user_id !== null) ? '' : 'disabled'; ?>">Buy All Now</button>
+                        </form>
+                        <button class="<?php echo ($grand_total > 0 && $user_id !== null) ? '' : 'disabled'; ?>">
+                            <a href="Cart.php?delete_all" onclick="return confirm('Are you sure you want to delete all cart items?')">Delete All</a>
+                        </button>
 
-                            <p>Grand Total : <i class="fa-solid fa-indian-rupee-sign"></i> <span><?php echo htmlspecialchars(number_format($grand_total, 2)); ?></span></p>
-                        </div>
-                    </td>
-                    <td class="cart-total"></td>
-                </tr>
-            </table>
+                        <p>Grand Total : <i class="fa-solid fa-indian-rupee-sign"></i> <span><?php echo htmlspecialchars(number_format($grand_total, 2)); ?></span></p>
+                    </div>
+                </td>
+                <td class="cart-total"></td>
+            </tr>
+        </table>
     </main>
         
     <script src="../JS/index.js"></script> 

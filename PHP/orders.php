@@ -76,19 +76,19 @@ if (isset($_POST['search'])) {
     </header>
 
     <div class="pr-options hide">
-        <a href="Update Profile.php"><button>Update User Profile <i class="fa-solid fa-address-card" style="color: #ffffff;"></i></button></a><br>
-        <a href="Update Password.php"><button>Change Password <i class="fa-solid fa-key" style="color: #ffffff;"></i></button></a><br>
-        
+        <a href="admin/update_profile.php"><button>Update User Profile <i class="fa-solid fa-address-card" style="color: #ffffff;"></i></button></a><br>
+        <a href="admin/update_password.php"><button>Change Password <i class="fa-solid fa-key" style="color: #ffffff;"></i></button></a><br>
+
         <?php if ($user_role === 'admin' || $user_role === 'owner') { ?>
-        <a href="AdminPanel.php" target="_blank"><button>Admin Panel <i class="fa-solid fa-user-tie"></i></button></a><br>
+            <a href="admin/admin_panel.php" target="_blank"><button>Admin Panel <i class="fa-solid fa-user-tie"></i></button></a><br>
         <?php } ?>
 
         <a href="contact.php"><button>Support <i class="fa-solid fa-headset" style="color: #ffffff;"></i></button></a><br>
-        
-        <a href="../index.php?logout=true"  onclick="return confirm('Are you sure you want to log out ??');">
-            <button>Log Out <i class="fa-solid fa-right-from-bracket" style="color: #ffffff;"></button></i>
+            
+        <a href="?logout=true"  onclick="return confirm('Are you sure you want to log out?');">
+            <button>Log Out <i class="fa-solid fa-right-from-bracket" style="color: #ffffff;"></i></button>
         </a>
-        
+            
     </div>
 
     <section class="main">

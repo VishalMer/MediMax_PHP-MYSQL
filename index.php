@@ -72,7 +72,8 @@ if (isset($_POST['search'])) {
         </div>
     </header>
     
-    <?php if ($user_id !== null): ?> <div class="pr-options hide">
+    <?php if ($user_id !== null): ?> 
+        <div class="pr-options hide">
             <a href="PHP/admin/update_profile.php"><button>Update User Profile <i class="fa-solid fa-address-card" style="color: #ffffff;"></i></button></a><br>
             <a href="PHP/admin/update_password.php"><button>Change Password <i class="fa-solid fa-key" style="color: #ffffff;"></i></button></a><br>
 
