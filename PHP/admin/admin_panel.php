@@ -3,7 +3,7 @@ include '../connection.php';
 include 'admin_details.php'; 
 
 if (isset($_GET['logout'])) {
-    // Unset all of the session variables
+    
     $_SESSION = array();
     session_destroy();
 
