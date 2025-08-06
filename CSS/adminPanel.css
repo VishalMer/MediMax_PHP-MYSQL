@@ -1,0 +1,411 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    text-transform: none;
+    transition: all 0.3s linear;
+    font-family: poppines,Verdana, Geneva, Tahoma, sans-serif;
+}
+
+body {
+    display: flex;
+    background-color: #70ABAF;
+    align-items: center;
+    background-image: url('../Images/MediMax-BG.jpeg');
+}
+
+body::-webkit-scrollbar{
+    display: none;
+}
+
+.message{
+    position: fixed; /* Makes sure the element can overlap other elements */
+    top: 45%;           /* Vertically centers the element */
+    left: 55%;          /* Horizontally centers the element */
+    transform: translate(-50%, -50%); /* Corrects the centering offset */
+    z-index: 5;      /* Ensures it displays over other elements */
+    width: max-content;         /* Adjust as needed to control the width */
+    margin: 0 auto;     /* Centers the div itself */
+    text-align: center; /* Centers the text inside the div */
+    background-color: rgb(0, 0, 0); /* Optional: translucent background */
+    padding: 10px 20px;      /* Optional: some padding for aesthetics */
+    border: 1px solid #ccc; /* Optional: a border for better visibility */
+    border-radius: 40px;
+    color: #ffffff;
+    font-size: 12px;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
+}
+
+/* Message positions for different messages */
+.msg{
+    top: 10%;
+    left: 56%;
+}
+
+.pass-msg1{
+    top: 10%;
+    left: 43%;
+}
+
+.pass-msg2{
+    top: 7%;
+    left: 28%;
+}
+
+.pr-msg1{
+    top: 14%;
+    left: 57%;
+}
+
+.pr-msg2{
+    top: 10%;
+    left: 43%;
+}
+
+
+/* header and navigation */
+.header{
+    background-color: rgb(9, 78, 126);
+    height: 100%;
+    min-height: 100vh;
+    width: max-content;
+    padding: 8px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    flex-wrap: wrap;
+    border-radius: 0 5px 5px 0;
+    overflow: hidden;
+    position: sticky; 
+    top: 0; 
+    left: 0;
+    bottom: 0;
+    z-index: 1000; 
+}
+
+.header .user-info{
+    padding: 12px;
+    display: flex;
+    background-color: rgb(177, 221, 232);
+    border-radius: 10px;
+    height: fit-content;
+}
+
+.header .user-info .profile-pic{
+    background-color: #fff;
+    color: rgb(9, 78, 126);
+    border-radius: 50%;
+    height: 3em;
+    width: 3em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
+}
+
+.header .user-info .profile-pic span{
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.header .user-info .user-name{
+    padding-left: 10px;
+    align-items: center;
+    font-size: 18px;
+    color: #fff;
+    font-weight: bold;
+    text-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
+}
+
+.header .user-info .user-name .user-bio{
+    font-size: 12px;
+    font-weight: 100;
+    color: rgb(9, 78, 126);
+    text-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
+}
+
+.header .nav{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+}
+
+.header .nav a{
+    font-size: 1rem;
+    padding: 0.5em 100%;
+    white-space: nowrap;
+    margin: 4px 0;
+    color: #fff;
+    font-weight: bold;
+}
+
+.header .nav a:hover, .active{
+    background: rgb(177, 221, 232);
+    transition: 0.5s ease-in-out;
+    text-shadow: 0 0px 8px rgb(9, 78, 126);
+}
+
+
+/* section - main content */
+.section {
+    margin-top: 20px; 
+    padding: 20px; 
+}
+.section h1,.section p{
+    margin: -1.5em 0 1em 0;
+}
+.section h1, .section h2,.section p{
+    font-weight: bold;
+    text-align: center;
+}
+.section h1{
+    color: rgb(9, 78, 126);
+}
+
+.stats {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    text-align: center;
+    width: 82vw;
+}
+
+.stat {
+    width: 15em;
+    height: 6em;
+    background-color: rgb(9, 78, 126);
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+    margin: 1em 0;
+    box-shadow: 0px 0px 7px rgba(0, 0, 0, 0.642);
+}
+
+.section .stats a .stat:hover{    
+    transform: scale(1.05); /* Slightly scale up on hover */
+}
+
+.section .stats .stat p{
+    font-size: 0.95em;
+    font-weight: bold;
+    margin-top: 10px;
+}
+.section .stats a .stat p{
+    font-size: 1.2em;
+}
+
+.section h2{
+    margin: 1em 0 -1em 0;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+    color: rgb(230, 120, 52);
+}
+
+/* Admin Products */
+
+.section table{
+    width: 80vw;
+    border-collapse: collapse;
+    text-align: center;
+    margin: -1% 0 0 2%;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    border: 2px solid #007BFF; /* Outer border; adjust color and thickness as needed */
+    border-radius: 10px; /* Rounded corners */
+    overflow: hidden; /* This is crucial to ensure the border-radius is applied to child elements */
+    backdrop-filter: blur(10px) !important;
+}
+
+.section table th{
+    background-color: rgb(9, 78, 126);
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+    text-transform: uppercase;
+    height: 3.5em;
+}
+.section table td{
+    background-color: rgba(9, 77, 126, 0);
+}
+.section table th, .section table td{
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+
+.section table tr td img{
+    height: 4em;
+    width: auto;
+    border-radius: 3px;
+}
+
+/* hover effect on rows */
+tr:hover {
+    background-color: #f1f1f1; /* Change background on hover */
+}
+
+.section table tr td button,.container button{
+    background-color: #70ABAF;
+    color: white;
+    border: none;
+    outline: none;
+    padding: 5px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+    font-size: 12px;
+    font-weight: bold;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 0px 8px rgb(9, 78, 126);
+    background-image: linear-gradient(to right, rgb(9, 78, 126), rgb(255, 255, 255));
+    background-size: 200% 100%;
+}
+
+.section table tr td span{
+    margin: 0 10px;
+}
+
+.section button:hover{
+    transform: scale(1.09);
+    transition: 0.3s ease-in-out;
+}
+
+.section table tr td a{
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.section{
+    display: block;
+    justify-content: center;
+    align-items: center;
+}
+/* Edit And Modify */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 20px;
+    background-color: #ffffff00;
+    padding: 2em 3em;
+    border-radius: 10px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    margin-left: 20em;
+    max-width: 24em;
+
+}
+
+.section .edit-product{
+    margin-top: -1em;
+    margin-bottom: 0em;
+}
+
+.container h2{
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+}
+
+.container input{
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #cccccc;
+    margin-bottom: 10px;
+    outline: none;
+}
+
+.container label{
+    color: rgb(9, 78, 126);
+    font-weight: bold;
+    padding: 5px;
+}
+
+.container img{
+    width: auto;
+    height: 100px;
+    margin-bottom: 10px;
+    border-radius: 15px;
+    margin: 3px 12px 12px 12px;
+}
+
+.current-img img{
+    margin-top: 5px;
+    margin-left: 35%;
+}
+
+.container form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.container button{
+    padding: 10px 18px;
+    font-size: 14px;  
+    margin: 10px 0 10px 0;
+}
+
+.container button a{
+    color: #ffffff;
+}
+
+.update-pass{
+    backdrop-filter: blur(5px);
+    margin-left: 9em;
+    margin-top: 2em;
+}
+
+.update-pass .buttons{
+    width: 100%;
+    text-align: center;
+}
+
+.Update-pr{
+    min-width: 60vw;
+    margin-top: 3em;
+    margin-left: 18%;
+    background-color: #113a6600;
+    backdrop-filter: blur(5px);
+    border-radius: 20px;
+}
+
+.Update-pr form .main-ctr{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.Update-pr form .main-ctr .ctr{
+    max-width: 25vw;
+    margin: 1em 2em;
+}
+
+.Update-pr form .main-ctr input{
+    max-width: 20vw;
+}
+
+.Update-pr form .main-ctr img{
+    margin-left: 1em;
+}
+
+.Update-pr form .buttons{
+    display: flex;
+    width: 50vw;
+    justify-content: space-around;
+}
+
+.Update-pr form .buttons button{
+    margin-left: -10em ;
+}
+
+.bg-img{
+    width: 100%;
+    position: absolute;
+    z-index: -5;
+}
