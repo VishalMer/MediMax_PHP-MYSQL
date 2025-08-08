@@ -18,6 +18,31 @@ if (isset($_POST['search'])) {
     $search_query = htmlspecialchars($_GET['search']);
 }
 
+// --- Start of new/modified code ---
+
+// First, perform the search query to get the results and the count.
+$select_product = null; // Initialize the variable
+
+if (!empty($search_query)) {
+    $search_sql = mysqli_real_escape_string($conn, $search_query);
+    $select_product = mysqli_query($conn, "SELECT * FROM `products` WHERE name LIKE '%$search_sql%'") or die('Query failed: ' . mysqli_error($conn));
+} else {
+    $select_product = mysqli_query($conn, "SELECT * FROM `products`") or die('Query failed: ' . mysqli_error($conn));
+}
+
+// Get the number of rows (products) from the query
+$product_count = mysqli_num_rows($select_product);
+
+// Now, determine the class for the main product container based on the count.
+// If it's a search result with only one product, use the special class.
+// Otherwise, use the default 'shopping' class for the grid layout.
+$container_class = 'shopping';
+if (!empty($search_query) && $product_count === 1) {
+    $container_class = 'shopping search-results-container';
+}
+
+// --- End of new/modified code ---
+
 ?>
 
 <!DOCTYPE html>
@@ -26,7 +51,7 @@ if (isset($_POST['search'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../CSS/style.css"> 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" xintegrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Products - MediMax.com</title>
 </head>
 <body style="min-height: 100vh;">
@@ -99,7 +124,11 @@ if (isset($_SESSION['message']) && !empty($_SESSION['message'])) {
 }
 ?>
 
-<div class="shopping">
+<!--
+    This is where the main change is. The class of this div is now
+    dynamically set based on the number of products found.
+-->
+<div class="<?php echo htmlspecialchars($container_class); ?>">
     <?php
     
         $user_cart_items = [];
@@ -115,49 +144,43 @@ if (isset($_SESSION['message']) && !empty($_SESSION['message'])) {
             }
         }
 
-        // Search products query
-        if (!empty($search_query)) {
-            $search_sql = mysqli_real_escape_string($conn, $search_query);
-            $select_product = mysqli_query($conn, "SELECT * FROM `products` WHERE name LIKE '%$search_sql%'") or die('Query failed: ' . mysqli_error($conn));
-        } else {
-            $select_product = mysqli_query($conn, "SELECT * FROM `products`") or die('Query failed: ' . mysqli_error($conn));
-        }
-
-        if (mysqli_num_rows($select_product) > 0) {
+        // The product display loop now uses the $select_product result from above.
+        if ($product_count > 0) {
+            mysqli_data_seek($select_product, 0); // Reset the pointer to the beginning
             while ($fetch_product = mysqli_fetch_assoc($select_product)) {
                 $product_name = $fetch_product['name'];
                 $is_in_wishlist = in_array($product_name, $user_wishlist_items);
                 $is_in_cart = in_array($product_name, $user_cart_items); 
     ?>
-                    <form method="post" class="box" action="products.php"> 
-                        <h2><?php echo htmlspecialchars($product_name); ?></h2>
-                        <div class="box-img" style="background-image: url('../Images/<?php echo htmlspecialchars($fetch_product['image']); ?>')"></div> 
-                        <div class="box-bottom">
-                            <p>Price: <i class="fa-solid fa-indian-rupee-sign"></i> <strong><?php echo htmlspecialchars($fetch_product['price']); ?></strong></p>
-                            <?php if ($user_id !== null): ?> 
-                                <button type="submit" name="add_to_cart" id="addToCart" class="cart-btn">
-                                    <i class="fa-solid fa-cart-plus"></i>
-                                </button>
-                                <button type="submit" name="add_to_wishlist" id="add-wishlist" class="wishlist-btn">
-                                    <i class="<?php echo $is_in_wishlist ? 'fa-solid fa-heart' : 'fa-regular fa-heart'; ?>" 
-                                       style="<?php echo $is_in_wishlist ? 'color: #ff0000;' : ''; ?>"></i> 
-                                </button>
-                            <?php else: ?>
-                                <button type="submit" name="add_to_cart" title="Login to add to cart"><i class="fa-solid fa-cart-plus"></i></button>
-                                <button type="submit" name="add_to_wishlist" title="Login to add to wishlist"><i class="fa-regular fa-heart"></i></button>
-                            <?php endif; ?>
-                        </div><br>
+            <form method="post" class="box" action="products.php"> 
+                <h2><?php echo htmlspecialchars($product_name); ?></h2>
+                <div class="box-img" style="background-image: url('../Images/<?php echo htmlspecialchars($fetch_product['image']); ?>')"></div> 
+                <div class="box-bottom">
+                    <p>Price: <i class="fa-solid fa-indian-rupee-sign"></i> <strong><?php echo htmlspecialchars($fetch_product['price']); ?></strong></p>
+                    <?php if ($user_id !== null): ?> 
+                        <button type="submit" name="add_to_cart" id="addToCart" class="cart-btn">
+                            <i class="fa-solid fa-cart-plus"></i>
+                        </button>
+                        <button type="submit" name="add_to_wishlist" id="add-wishlist" class="wishlist-btn">
+                            <i class="<?php echo $is_in_wishlist ? 'fa-solid fa-heart' : 'fa-regular fa-heart'; ?>" 
+                                style="<?php echo $is_in_wishlist ? 'color: #ff0000;' : ''; ?>"></i> 
+                        </button>
+                    <?php else: ?>
+                        <button type="submit" name="add_to_cart" title="Login to add to cart"><i class="fa-solid fa-cart-plus"></i></button>
+                        <button type="submit" name="add_to_wishlist" title="Login to add to wishlist"><i class="fa-regular fa-heart"></i></button>
+                    <?php endif; ?>
+                </div><br>
 
-                        <input type="hidden" name="product_image" value="<?php echo htmlspecialchars($fetch_product['image']); ?>">
-                        <input type="hidden" name="product_name" value="<?php echo htmlspecialchars($fetch_product['name']); ?>">
-                        <input type="hidden" name="product_price" value="<?php echo htmlspecialchars($fetch_product['price']); ?>">
-                    </form>
-            <?php
-                }
-            } else {
-                echo "<p class='no-products'>No products found. We will make them available as soon as possible.</p>";
+                <input type="hidden" name="product_image" value="<?php echo htmlspecialchars($fetch_product['image']); ?>">
+                <input type="hidden" name="product_name" value="<?php echo htmlspecialchars($fetch_product['name']); ?>">
+                <input type="hidden" name="product_price" value="<?php echo htmlspecialchars($fetch_product['price']); ?>">
+            </form>
+    <?php
             }
-            ?>
+        } else {
+            echo "<p class='no-products'>No products found. We will make them available as soon as possible.</p>";
+        }
+    ?>
 </div>
 
     <footer class="footer" >
